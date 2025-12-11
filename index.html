@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Links • ZayninRevolt</title>
-  <meta name="description" content="A tiny Windows 98–style link-in-bio page for TikTok, Instagram, YouTube, and Spotify." />
+  <meta name="description" content="A tiny Windows 98–style link-in-bio page for TikTok, Instagram, YouTube, Spotify and Steam." />
   <style>
     :root {
       --face: #c0c0c0;
@@ -51,6 +51,7 @@
       cursor: default;
       user-select: none;
       position: absolute;
+      transition: transform 0.05s ease, filter 0.1s ease;
     }
 
     .icon img {
@@ -59,11 +60,27 @@
       image-rendering: pixelated;
     }
 
+    .icon span {
+      text-shadow: 1px 1px 0 #000;
+    }
+
+    .icon:hover {
+      filter: brightness(1.2);
+    }
+
+    .icon:active {
+      transform: translateY(1px);
+    }
+
     .window {
       width: min(560px, 92vw);
       background: var(--face);
       border: 2px solid var(--dark);
-      box-shadow: 1px 1px 0 var(--shadow), -1px -1px 0 var(--light), inset -1px -1px 0 var(--shadow), inset 1px 1px 0 var(--light);
+      box-shadow:
+        1px 1px 0 var(--shadow),
+        -1px -1px 0 var(--light),
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
       position: absolute;
       top: 50px;
       left: 50%;
@@ -72,56 +89,332 @@
       z-index: 1;
     }
 
-    .title-bar { height: 28px; display: flex; align-items: center; gap: 8px; padding: 0 6px; color: #fff; background: linear-gradient(90deg, var(--accent), #3a6ea5); cursor: grab; touch-action: none; }
+    .title-bar {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 6px;
+      color: #fff;
+      background: linear-gradient(90deg, var(--accent), #3a6ea5);
+      cursor: grab;
+      touch-action: none;
+    }
+
     .title-bar:active { cursor: grabbing; }
-    .title-icon { display: inline-flex; width: 18px; height: 18px; align-items: center; justify-content: center; background: #f0f0f0; border: 1px solid #000; }
-    .title-text { font-weight: 700; letter-spacing: .2px; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .title-icon {
+      display: inline-flex;
+      width: 18px;
+      height: 18px;
+      align-items: center;
+      justify-content: center;
+      background: #f0f0f0;
+      border: 1px solid #000;
+    }
+
+    .title-text {
+      font-weight: 700;
+      letter-spacing: .2px;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .title-controls { display: inline-flex; gap: 2px; }
-    .control-btn { width: 20px; height: 18px; display: inline-grid; place-items: center; background: var(--face); border: 2px solid var(--dark); box-shadow: inset -1px -1px 0 var(--shadow), inset 1px 1px 0 var(--light); cursor: pointer; line-height: 0; }
-    .control-btn:active { box-shadow: inset 1px 1px 0 var(--shadow), inset -1px -1px 0 var(--light); }
+
+    .control-btn {
+      width: 20px;
+      height: 18px;
+      display: inline-grid;
+      place-items: center;
+      background: var(--face);
+      border: 2px solid var(--dark);
+      box-shadow:
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
+      cursor: pointer;
+      line-height: 0;
+    }
+
+    .control-btn:active {
+      box-shadow:
+        inset 1px 1px 0 var(--shadow),
+        inset -1px -1px 0 var(--light);
+    }
 
     .window-body { padding: 14px; display: grid; gap: 14px; }
+
     .profile { display: flex; align-items: center; gap: 12px; }
-    .avatar { width: 72px; height: 72px; border: 2px solid var(--dark); box-shadow: 1px 1px 0 var(--shadow), -1px -1px 0 var(--light), inset -1px -1px 0 var(--shadow), inset 1px 1px 0 var(--light); background: url('img/profile.png') center/cover no-repeat; }
-    .username { font-weight: bold; font-size: 1.2rem; }
 
-    .group-box { border: 2px solid var(--dark); box-shadow: 1px 1px 0 var(--shadow), -1px -1px 0 var(--light), inset -1px -1px 0 var(--shadow), inset 1px 1px 0 var(--light); padding: 12px; background: var(--mid); }
-    .group-title { position: relative; top: -22px; left: 10px; background: var(--mid); display: inline-block; padding: 0 6px; font-weight: 700; }
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border: 2px solid var(--dark);
+      box-shadow:
+        1px 1px 0 var(--shadow),
+        -1px -1px 0 var(--light),
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
+      background: url('img/profile.png') center/cover no-repeat;
+    }
+
+    .username {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .group-box {
+      border: 2px solid var(--dark);
+      box-shadow:
+        1px 1px 0 var(--shadow),
+        -1px -1px 0 var(--light),
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
+      padding: 12px;
+      background: var(--mid);
+      position: relative;
+    }
+
+    .group-title {
+      position: absolute;
+      top: -12px;
+      left: 10px;
+      background: var(--mid);
+      display: inline-block;
+      padding: 0 6px;
+      font-weight: 700;
+    }
+
     .links { display: grid; gap: 10px; }
-    .btn-98 { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); padding: 10px 12px; background: var(--face); border: 2px solid var(--dark); box-shadow: inset -1px -1px 0 var(--shadow), inset 1px 1px 0 var(--light); font-weight: 600; }
-    .btn-98:active { box-shadow: inset 1px 1px 0 var(--shadow), inset -1px -1px 0 var(--light); transform: translateY(1px); }
-    .btn-icon { width: 22px; height: 22px; display: inline-block; }
-    .status-bar { display: flex; justify-content: space-between; padding-top: 6px; font-size: .85rem; color: #222; }
 
-    .taskbar { height: 36px; background: var(--taskbar); border-top: 2px solid var(--dark); box-shadow: inset 0 1px 0 var(--light); display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; padding: 4px 6px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 2; }
-    .start-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: var(--face); border: 2px solid var(--dark); box-shadow: inset -1px -1px 0 var(--shadow), inset 1px 1px 0 var(--light); font-weight: 700; cursor: default; }
-    .start-btn:active { box-shadow: inset 1px 1px 0 var(--shadow), inset -1px -1px 0 var(--light); }
+    .btn-98 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      padding: 10px 12px;
+      background: var(--face);
+      border: 2px solid var(--dark);
+      box-shadow:
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
+      font-weight: 600;
+    }
 
-    @media (max-width: 420px) { .avatar { width: 56px; height: 56px; } .title-text { font-size: .95rem; } }
+    .btn-98:active {
+      box-shadow:
+        inset 1px 1px 0 var(--shadow),
+        inset -1px -1px 0 var(--light);
+      transform: translateY(1px);
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 6px;
+      font-size: .85rem;
+      color: #222;
+    }
+
+    .taskbar {
+      height: 36px;
+      background: var(--taskbar);
+      border-top: 2px solid var(--dark);
+      box-shadow: inset 0 1px 0 var(--light);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 6px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+    }
+
+    .start-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: var(--face);
+      border: 2px solid var(--dark);
+      box-shadow:
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
+      font-weight: 700;
+      cursor: default;
+    }
+
+    .start-btn:active {
+      box-shadow:
+        inset 1px 1px 0 var(--shadow),
+        inset -1px -1px 0 var(--light);
+    }
+
+    .task {
+      padding: 4px 8px;
+      background: var(--face);
+      border: 2px solid var(--dark);
+      box-shadow:
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .clock {
+      font-variant-numeric: tabular-nums;
+      font-size: 0.85rem;
+    }
+
+    /* Start menu */
+
+    .start-menu {
+      position: fixed;
+      bottom: 36px;
+      left: 4px;
+      width: 220px;
+      background: var(--face);
+      border: 2px solid var(--dark);
+      box-shadow:
+        1px 1px 0 var(--shadow),
+        -1px -1px 0 var(--light),
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
+      display: none;
+      z-index: 3;
+    }
+
+    .start-menu-inner {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .start-menu-title {
+      padding: 6px;
+      font-weight: 700;
+      border-bottom: 1px solid var(--shadow);
+      background: linear-gradient(90deg, var(--accent), #3a6ea5);
+      color: #fff;
+    }
+
+    .start-item {
+      padding: 6px 8px;
+      background: transparent;
+      border: none;
+      text-align: left;
+      font: inherit;
+      cursor: default;
+    }
+
+    .start-item:hover {
+      background: #000080;
+      color: #fff;
+    }
+
+    /* Dialog */
+
+    .dialog-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.25);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 4;
+    }
+
+    .dialog {
+      width: 320px;
+      background: var(--face);
+      border: 2px solid var(--dark);
+      box-shadow:
+        1px 1px 0 var(--shadow),
+        -1px -1px 0 var(--light),
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
+    }
+
+    .dialog-title-bar {
+      background: var(--accent);
+      color: #fff;
+      padding: 4px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .dialog-body {
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+
+    .dialog-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      padding: 8px 10px;
+    }
+
+    .btn-98-small {
+      min-width: 70px;
+      padding: 3px 10px;
+      background: var(--face);
+      border: 2px solid var(--dark);
+      box-shadow:
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
+      cursor: default;
+      font-size: 0.85rem;
+    }
+
+    .btn-98-small:active {
+      box-shadow:
+        inset 1px 1px 0 var(--shadow),
+        inset -1px -1px 0 var(--light);
+      transform: translateY(1px);
+    }
+
+    @media (max-width: 420px) {
+      .avatar { width: 56px; height: 56px; }
+      .title-text { font-size: .95rem; }
+    }
   </style>
 </head>
 <body>
-  <<a href="https://store.steampowered.com/app/570/Dota_2/" target="_blank">
-  <div class="icon" style="top: 20px; left: 20px;">
-    <img src="img/dota.jpg" alt="Dota 2 icon" />
-    <span>Dota 2</span>
-  </div>
-</a>
+  <div class="desktop">
+    <!-- Desktop icons -->
+    <a href="https://store.steampowered.com/app/570/Dota_2/" target="_blank">
+      <div class="icon" style="top: 20px; left: 20px;">
+        <img src="img/dota.jpg" alt="Dota 2 icon" />
+        <span>Dota 2</span>
+      </div>
+    </a>
 
-<a href="https://store.steampowered.com/app/892970/Valheim/" target="_blank">
-  <div class="icon" style="top: 110px; left: 20px;">
-    <img src="img/val.jpg" alt="Valheim icon" />
-    <span>Valheim</span>
-  </div>
-</a>
+    <a href="https://store.steampowered.com/app/892970/Valheim/" target="_blank">
+      <div class="icon" style="top: 110px; left: 20px;">
+        <img src="img/val.jpg" alt="Valheim icon" />
+        <span>Valheim</span>
+      </div>
+    </a>
 
-<a href="https://store.steampowered.com/app/739630/Phasmophobia/" target="_blank">
-  <div class="icon" style="top: 200px; left: 20px;">
-    <img src="img/phas.jpg" alt="Phasmophobia icon" />
-    <span>Phasmophobia</span>
-  </div>
-</a>
+    <a href="https://store.steampowered.com/app/739630/Phasmophobia/" target="_blank">
+      <div class="icon" style="top: 200px; left: 20px;">
+        <img src="img/phas.jpg" alt="Phasmophobia icon" />
+        <span>Phasmophobia</span>
+      </div>
+    </a>
 
+    <!-- Main window -->
     <main class="window" id="win">
       <div class="title-bar" id="dragbar">
         <span class="title-icon">🗂️</span>
@@ -144,31 +437,76 @@
             <a class="btn-98" href="https://www.instagram.com/zayninrevolt" target="_blank">Instagram</a>
             <a class="btn-98" href="https://www.youtube.com/@zaynonfire" target="_blank">YouTube</a>
             <a class="btn-98" href="https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA?si=Zc_3ZtKqT0Sm36SUb8KyPQ" target="_blank">Spotify Playlist</a>
-            <a class="btn-98" href="https://steamcommunity.com/id/ZaynOnFire" target="_blank">Steam Profile</a>
-            <a class="btn-98" href="https://dokkadoki.co.uk" target="_blank">DokkaDoki</a>
+            <a class="btn-98" href="https://steamcommunity.com/id/ZaynOnFire" target="_blank">Steam</a>
+            <a class="btn-98" href="https://dokkadoki.co.uk" target="_blank">Store</a>
           </div>
-          <div class="status-bar"><span>6 items</span><span>Ready</span></div>
+          <div class="status-bar">
+            <span>6 items</span>
+            <span id="statusText">Ready</span>
+          </div>
         </div>
       </section>
     </main>
 
+    <!-- Taskbar -->
     <footer class="taskbar">
-      <div class="start-btn">🪟 Start</div>
+      <div class="start-btn" id="startBtn">🪟 Start</div>
       <div class="task">📎 Links - Windows</div>
       <time class="clock" id="clock">--:--</time>
     </footer>
+
+    <!-- Start menu -->
+    <div class="start-menu" id="startMenu">
+      <div class="start-menu-inner">
+        <div class="start-menu-title">Windows</div>
+        <button class="start-item" id="aboutBtn">About ZayninRevolt…</button>
+        <button class="start-item" onclick="window.open('https://steamcommunity.com/id/ZaynOnFire','_blank')">
+          Open Steam Profile
+        </button>
+      </div>
+    </div>
+
+    <!-- About dialog -->
+    <div class="dialog-backdrop" id="aboutDialog">
+      <div class="dialog">
+        <div class="dialog-title-bar">
+          <span>About ZayninRevolt</span>
+          <span id="aboutClose" style="cursor: default;">✕</span>
+        </div>
+        <div class="dialog-body">
+          <p><strong>ZayninRevolt</strong> – gamer, creator, and owner of this tiny cursed Windows 98 desktop.</p>
+          <p>Click the icons, follow the links, and try not to alt+F4 real life.</p>
+        </div>
+        <div class="dialog-buttons">
+          <button class="btn-98-small" id="aboutOk">OK</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
+    // Drag window
     const win = document.getElementById('win');
     const bar = document.getElementById('dragbar');
     let offsetX = 0, offsetY = 0, isDragging = false;
 
-    bar.addEventListener('pointerdown', (e) => { isDragging = true; offsetX = e.clientX - win.offsetLeft; offsetY = e.clientY - win.offsetTop; bar.setPointerCapture(e.pointerId); });
-    bar.addEventListener('pointermove', (e) => { if (!isDragging) return; win.style.left = (e.clientX - offsetX) + 'px'; win.style.top = (e.clientY - offsetY) + 'px'; });
+    bar.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      offsetX = e.clientX - win.offsetLeft;
+      offsetY = e.clientY - win.offsetTop;
+      bar.setPointerCapture(e.pointerId);
+    });
+
+    bar.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      win.style.left = (e.clientX - offsetX) + 'px';
+      win.style.top = (e.clientY - offsetY) + 'px';
+    });
+
     bar.addEventListener('pointerup', () => { isDragging = false; });
     bar.addEventListener('pointerleave', () => { isDragging = false; });
 
+    // Clock
     function updateClock() {
       const clock = document.getElementById('clock');
       const now = new Date();
@@ -178,6 +516,60 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    // Status bar hover messages
+    const statusText = document.getElementById('statusText');
+    const linkButtons = document.querySelectorAll('.btn-98');
+
+    linkButtons.forEach(btn => {
+      const label = btn.textContent.trim();
+      btn.addEventListener('mouseenter', () => {
+        statusText.textContent = `Open ${label}`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        statusText.textContent = 'Ready';
+      });
+    });
+
+    // Start menu toggle
+    const startBtn = document.getElementById('startBtn');
+    const startMenu = document.getElementById('startMenu');
+
+    startBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = startMenu.style.display === 'block';
+      startMenu.style.display = isOpen ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!startMenu.contains(e.target) && !startBtn.contains(e.target)) {
+        startMenu.style.display = 'none';
+      }
+    });
+
+    // About dialog
+    const aboutBtn = document.getElementById('aboutBtn');
+    const aboutDialog = document.getElementById('aboutDialog');
+    const aboutOk = document.getElementById('aboutOk');
+    const aboutClose = document.getElementById('aboutClose');
+
+    function closeAbout() {
+      aboutDialog.style.display = 'none';
+    }
+
+    aboutBtn.addEventListener('click', () => {
+      startMenu.style.display = 'none';
+      aboutDialog.style.display = 'flex';
+    });
+
+    aboutOk.addEventListener('click', closeAbout);
+    aboutClose.addEventListener('click', closeAbout);
+
+    aboutDialog.addEventListener('click', (e) => {
+      if (e.target === aboutDialog) {
+        closeAbout();
+      }
+    });
   </script>
 </body>
 </html>
