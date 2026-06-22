@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Links • ZayninRevolt</title>
-  <meta name="description" content="A tiny Windows 98–style link-in-bio page for TikTok, Instagram, YouTube, Spotify and Steam." />
+  <meta name="description" content="A tiny Windows 98–style link-in-bio page for TikTok, Instagram, YouTube, Spotify, Steam and Overwatch." />
   <style>
     :root {
       --face: #c0c0c0;
@@ -33,44 +33,53 @@
     .desktop {
       height: 100%;
       padding: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
       position: relative;
     }
 
+    /* Desktop icon grid (auto-flows into columns, wraps as needed) */
+    .icons {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      bottom: 48px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 4px;
+      z-index: 0;
+    }
+
+    .icon-link { text-decoration: none; }
+
     .icon {
-      width: 64px;
+      width: 72px;
       display: flex;
       flex-direction: column;
       align-items: center;
       color: #fff;
       font-size: 0.8rem;
       text-align: center;
-      margin: 10px;
+      margin: 8px;
       cursor: default;
       user-select: none;
-      position: absolute;
       transition: transform 0.05s ease, filter 0.1s ease;
     }
 
     .icon img {
       width: 48px;
       height: 48px;
-      image-rendering: pixelated;
+      object-fit: cover;
+      image-rendering: auto;
     }
 
     .icon span {
       text-shadow: 1px 1px 0 #000;
+      margin-top: 2px;
     }
 
-    .icon:hover {
-      filter: brightness(1.2);
-    }
-
-    .icon:active {
-      transform: translateY(1px);
-    }
+    .icon:hover { filter: brightness(1.2); }
+    .icon:active { transform: translateY(1px); }
 
     .window {
       width: min(560px, 92vw);
@@ -87,6 +96,14 @@
       transform: translateX(-50%);
       user-select: none;
       z-index: 1;
+    }
+
+    .window.maximized {
+      top: 0 !important;
+      left: 0 !important;
+      width: 100%;
+      height: calc(100% - 36px);
+      transform: none !important;
     }
 
     .title-bar {
@@ -136,6 +153,7 @@
         inset 1px 1px 0 var(--light);
       cursor: pointer;
       line-height: 0;
+      color: #000;
     }
 
     .control-btn:active {
@@ -151,6 +169,7 @@
     .avatar {
       width: 72px;
       height: 72px;
+      flex: 0 0 auto;
       border: 2px solid var(--dark);
       box-shadow:
         1px 1px 0 var(--shadow),
@@ -219,6 +238,124 @@
       color: #222;
     }
 
+    /* Overwatch rank cards */
+    .ow-ranks {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .ow-role {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 4px;
+      background: var(--face);
+      border: 2px solid var(--dark);
+      box-shadow:
+        inset -1px -1px 0 var(--shadow),
+        inset 1px 1px 0 var(--light);
+      text-align: center;
+    }
+
+    .ow-role-label { font-weight: 700; font-size: .8rem; }
+    .ow-rank-text { font-size: .8rem; }
+    .ow-rank-icon { width: 40px; height: 40px; object-fit: contain; }
+    .ow-message { margin: 0; font-size: .9rem; }
+
+    .ow-profile-link { color: var(--link); font-size: .85rem; }
+
+    /* Minesweeper */
+    .ms-body { padding: 8px; }
+
+    .ms-panel {
+      border: 3px solid;
+      border-color: var(--shadow) var(--light) var(--light) var(--shadow);
+      background: var(--face);
+      padding: 6px;
+    }
+
+    .ms-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 3px solid;
+      border-color: var(--shadow) var(--light) var(--light) var(--shadow);
+      padding: 5px 6px;
+      margin-bottom: 6px;
+    }
+
+    .ms-led {
+      font-family: "Courier New", monospace;
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      background: #000;
+      color: #ff2d2d;
+      padding: 2px 5px;
+      min-width: 52px;
+      text-align: right;
+    }
+
+    .ms-face {
+      width: 32px;
+      height: 32px;
+      font-size: 1.1rem;
+      display: grid;
+      place-items: center;
+      background: var(--face);
+      border: 2px solid;
+      border-color: var(--light) var(--shadow) var(--shadow) var(--light);
+      cursor: pointer;
+      padding: 0;
+    }
+    .ms-face:active { border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
+
+    .ms-grid {
+      display: grid;
+      grid-template-columns: repeat(9, 26px);
+      grid-template-rows: repeat(9, 26px);
+      border: 3px solid;
+      border-color: var(--shadow) var(--light) var(--light) var(--shadow);
+    }
+
+    .ms-cell {
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      margin: 0;
+      font-weight: 700;
+      font-size: 0.95rem;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      background: var(--face);
+      border: 3px solid;
+      border-color: var(--light) var(--shadow) var(--shadow) var(--light);
+      cursor: default;
+      user-select: none;
+      font-family: "Courier New", monospace;
+    }
+
+    .ms-cell.revealed {
+      border: 1px solid var(--shadow);
+      cursor: default;
+    }
+
+    .ms-cell.mine { background: #c0c0c0; }
+    .ms-cell.exploded { background: #ff2d2d; }
+
+    /* Classic number colors */
+    .ms-cell.n1 { color: #0000ff; }
+    .ms-cell.n2 { color: #007b00; }
+    .ms-cell.n3 { color: #ff0000; }
+    .ms-cell.n4 { color: #00007b; }
+    .ms-cell.n5 { color: #7b0000; }
+    .ms-cell.n6 { color: #007b7b; }
+    .ms-cell.n7 { color: #000000; }
+    .ms-cell.n8 { color: #7b7b7b; }
+
     .taskbar {
       height: 36px;
       background: var(--taskbar);
@@ -233,7 +370,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 2;
+      z-index: 5;
     }
 
     .start-btn {
@@ -267,15 +404,22 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      cursor: default;
+    }
+
+    .task.active {
+      box-shadow:
+        inset 1px 1px 0 var(--shadow),
+        inset -1px -1px 0 var(--light);
     }
 
     .clock {
       font-variant-numeric: tabular-nums;
       font-size: 0.85rem;
+      color: #000;
     }
 
     /* Start menu */
-
     .start-menu {
       position: fixed;
       bottom: 36px;
@@ -289,13 +433,10 @@
         inset -1px -1px 0 var(--shadow),
         inset 1px 1px 0 var(--light);
       display: none;
-      z-index: 3;
+      z-index: 6;
     }
 
-    .start-menu-inner {
-      display: flex;
-      flex-direction: column;
-    }
+    .start-menu-inner { display: flex; flex-direction: column; }
 
     .start-menu-title {
       padding: 6px;
@@ -314,13 +455,9 @@
       cursor: default;
     }
 
-    .start-item:hover {
-      background: #000080;
-      color: #fff;
-    }
+    .start-item:hover { background: #000080; color: #fff; }
 
     /* Dialog */
-
     .dialog-backdrop {
       position: fixed;
       inset: 0;
@@ -328,7 +465,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 4;
+      z-index: 7;
     }
 
     .dialog {
@@ -353,10 +490,7 @@
       font-size: 0.9rem;
     }
 
-    .dialog-body {
-      padding: 10px;
-      font-size: 0.9rem;
-    }
+    .dialog-body { padding: 10px; font-size: 0.9rem; }
 
     .dialog-buttons {
       display: flex;
@@ -384,7 +518,19 @@
       transform: translateY(1px);
     }
 
-    @media (max-width: 420px) {
+    @media (max-width: 600px) {
+      /* Icons become a horizontal scrolling strip across the top */
+      .icons {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        right: 12px;
+        bottom: auto;
+        overflow-x: auto;
+        padding-bottom: 4px;
+      }
+      .icon { width: 64px; margin: 4px; }
+      .window { top: 130px; }
+      .ow-rank-icon { width: 32px; height: 32px; }
       .avatar { width: 56px; height: 56px; }
       .title-text { font-size: .95rem; }
     }
@@ -393,36 +539,54 @@
 <body>
   <div class="desktop">
     <!-- Desktop icons -->
-    <a href="https://store.steampowered.com/app/570/Dota_2/" target="_blank">
-      <div class="icon" style="top: 20px; left: 20px;">
-        <img src="img/dota.jpg" alt="Dota 2 icon" />
-        <span>Dota 2</span>
-      </div>
-    </a>
+    <div class="icons">
+      <a class="icon-link" href="https://store.steampowered.com/app/570/Dota_2/" target="_blank" rel="noopener">
+        <div class="icon">
+          <img src="img/dota.jpg" alt="Dota 2 icon" />
+          <span>Dota 2</span>
+        </div>
+      </a>
 
-    <a href="https://store.steampowered.com/app/892970/Valheim/" target="_blank">
-      <div class="icon" style="top: 110px; left: 20px;">
-        <img src="img/val.jpg" alt="Valheim icon" />
-        <span>Valheim</span>
-      </div>
-    </a>
+      <a class="icon-link" href="https://store.steampowered.com/app/892970/Valheim/" target="_blank" rel="noopener">
+        <div class="icon">
+          <img src="img/val.jpg" alt="Valheim icon" />
+          <span>Valheim</span>
+        </div>
+      </a>
 
-    <a href="https://store.steampowered.com/app/739630/Phasmophobia/" target="_blank">
-      <div class="icon" style="top: 200px; left: 20px;">
-        <img src="img/phas.jpg" alt="Phasmophobia icon" />
-        <span>Phasmophobia</span>
-      </div>
-    </a>
+      <a class="icon-link" href="https://store.steampowered.com/app/739630/Phasmophobia/" target="_blank" rel="noopener">
+        <div class="icon">
+          <img src="img/phas.jpg" alt="Phasmophobia icon" />
+          <span>Phasmophobia</span>
+        </div>
+      </a>
 
-    <!-- Main window -->
+      <!-- Minesweeper: opens a playable in-page game window -->
+      <div class="icon-link" id="msIconLink" role="button" tabindex="0">
+        <div class="icon">
+          <img src="img/minesweeper.png" alt="Minesweeper icon" />
+          <span>Minesweeper</span>
+        </div>
+      </div>
+
+      <!-- Overwatch: opens an in-page window instead of navigating away -->
+      <div class="icon-link" id="owIconLink" role="button" tabindex="0">
+        <div class="icon">
+          <img src="img/overwatch.svg" alt="Overwatch icon" />
+          <span>Overwatch</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main "My Links" window -->
     <main class="window" id="win">
-      <div class="title-bar" id="dragbar">
+      <div class="title-bar">
         <span class="title-icon">🗂️</span>
         <div class="title-text">My Links</div>
         <div class="title-controls">
-          <div class="control-btn">_</div>
-          <div class="control-btn">▢</div>
-          <div class="control-btn">✕</div>
+          <div class="control-btn" data-action="minimize" data-target="win" title="Minimize">_</div>
+          <div class="control-btn" data-action="maximize" data-target="win" title="Maximize">▢</div>
+          <div class="control-btn" data-action="close" data-target="win" title="Close">✕</div>
         </div>
       </div>
       <section class="window-body">
@@ -433,12 +597,12 @@
         <div class="group-box">
           <span class="group-title">Socials</span>
           <div class="links">
-            <a class="btn-98" href="https://www.tiktok.com/@zayninrevolt" target="_blank">TikTok</a>
-            <a class="btn-98" href="https://www.instagram.com/zayninrevolt" target="_blank">Instagram</a>
-            <a class="btn-98" href="https://www.youtube.com/@zaynonfire" target="_blank">YouTube</a>
-            <a class="btn-98" href="https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA?si=Zc_3ZtKqT0Sm36SUb8KyPQ" target="_blank">Spotify Playlist</a>
-            <a class="btn-98" href="https://discord.com/users/just.zayn" target="_blank">Discord</a>
-            <a class="btn-98" href="https://dokkadoki.co.uk" target="_blank">DokkaDoki</a>
+            <a class="btn-98" href="https://www.tiktok.com/@zayninrevolt" target="_blank" rel="noopener">TikTok</a>
+            <a class="btn-98" href="https://www.instagram.com/zayninrevolt" target="_blank" rel="noopener">Instagram</a>
+            <a class="btn-98" href="https://www.youtube.com/@zaynonfire" target="_blank" rel="noopener">YouTube</a>
+            <a class="btn-98" href="https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA?si=Zc_3ZtKqT0Sm36SUb8KyPQ" target="_blank" rel="noopener">Spotify Playlist</a>
+            <a class="btn-98" href="https://discord.com/users/just.zayn" target="_blank" rel="noopener">Discord</a>
+            <a class="btn-98" href="https://dokkadoki.co.uk" target="_blank" rel="noopener">DokkaDoki</a>
           </div>
           <div class="status-bar">
             <span>6 items</span>
@@ -448,10 +612,61 @@
       </section>
     </main>
 
+    <!-- Overwatch window (hidden until icon is clicked) -->
+    <main class="window" id="owWin" style="display: none; top: 80px;">
+      <div class="title-bar">
+        <span class="title-icon">🎮</span>
+        <div class="title-text">Overwatch — Zayn</div>
+        <div class="title-controls">
+          <div class="control-btn" data-action="close" data-target="owWin" title="Close">✕</div>
+        </div>
+      </div>
+      <section class="window-body">
+        <div class="profile">
+          <div class="avatar" id="owAvatar" style="background-image: url('img/overwatch.svg'); background-color:#f99e1a;"></div>
+          <div>
+            <div class="username" id="owName">Zayn</div>
+            <a class="ow-profile-link" id="owProfileLink" href="#" target="_blank" rel="noopener">View career profile ↗</a>
+          </div>
+        </div>
+        <div class="group-box">
+          <span class="group-title">Competitive Rank</span>
+          <div class="ow-ranks" id="owRanks">
+            <p class="ow-message" style="grid-column: 1 / -1;">Loading…</p>
+          </div>
+          <div class="status-bar">
+            <span id="owSeason"></span>
+            <span id="owStatus">Idle</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Minesweeper window (hidden until icon is clicked) -->
+    <main class="window" id="msWin" style="display: none; width: auto; top: 90px;">
+      <div class="title-bar">
+        <span class="title-icon">💣</span>
+        <div class="title-text">Minesweeper</div>
+        <div class="title-controls">
+          <div class="control-btn" data-action="close" data-target="msWin" title="Close">✕</div>
+        </div>
+      </div>
+      <section class="window-body ms-body">
+        <div class="ms-panel">
+          <div class="ms-head">
+            <div class="ms-led" id="msMines">010</div>
+            <button class="ms-face" id="msFace" title="New game">🙂</button>
+            <div class="ms-led" id="msTimer">000</div>
+          </div>
+          <div class="ms-grid" id="msGrid"></div>
+        </div>
+      </section>
+    </main>
+
     <!-- Taskbar -->
     <footer class="taskbar">
       <div class="start-btn" id="startBtn">🪟 Start</div>
-      <div class="task">📎 Links - Windows</div>
+      <div class="task active" id="taskLinks">📎 Links - Windows</div>
       <time class="clock" id="clock">--:--</time>
     </footer>
 
@@ -460,7 +675,9 @@
       <div class="start-menu-inner">
         <div class="start-menu-title">Windows</div>
         <button class="start-item" id="aboutBtn">About ZayninRevolt…</button>
-        <button class="start-item" onclick="window.open('https://steamcommunity.com/id/ZaynOnFire','_blank')">
+        <button class="start-item" id="owMenuBtn">Overwatch Rank…</button>
+        <button class="start-item" id="msMenuBtn">Minesweeper</button>
+        <button class="start-item" onclick="window.open('https://steamcommunity.com/id/ZaynOnFire','_blank','noopener')">
           Open Steam Profile
         </button>
       </div>
@@ -485,91 +702,343 @@
   </div>
 
   <script>
-    // Drag window
+    /* ============================================================
+       Overwatch BattleTag
+       Replace the number below with your real discriminator.
+       Example: "zaynonfire#21534"  (the # is converted automatically)
+       Your career profile must be set to PUBLIC for the rank to load.
+       ============================================================ */
+    const OW_BATTLETAG = "Zayn#21529";
+
+    // ---------- Window management (drag, focus, minimize/maximize/close) ----------
+    let zCounter = 10;
+
+    function focusWindow(win) {
+      win.style.zIndex = ++zCounter;
+    }
+
+    function makeDraggable(win) {
+      const bar = win.querySelector('.title-bar');
+      let offsetX = 0, offsetY = 0, dragging = false;
+
+      win.addEventListener('pointerdown', () => focusWindow(win));
+
+      bar.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('.control-btn')) return; // don't drag from buttons
+        if (win.classList.contains('maximized')) return;
+        dragging = true;
+        // Drop the centering transform so left/top are absolute and don't jump.
+        const rect = win.getBoundingClientRect();
+        win.style.transform = 'none';
+        win.style.left = rect.left + 'px';
+        win.style.top = rect.top + 'px';
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+        bar.setPointerCapture(e.pointerId);
+      });
+
+      bar.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        const maxX = window.innerWidth - win.offsetWidth;
+        const maxY = window.innerHeight - 36 - 28; // keep title bar above taskbar
+        let left = e.clientX - offsetX;
+        let top = e.clientY - offsetY;
+        left = Math.min(Math.max(0, left), Math.max(0, maxX));
+        top = Math.min(Math.max(0, top), Math.max(0, maxY));
+        win.style.left = left + 'px';
+        win.style.top = top + 'px';
+      });
+
+      const stop = () => { dragging = false; };
+      bar.addEventListener('pointerup', stop);
+      bar.addEventListener('pointercancel', stop);
+    }
+
+    document.querySelectorAll('.window').forEach(makeDraggable);
+
+    // Title-bar control buttons
+    document.querySelectorAll('.control-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const win = document.getElementById(btn.dataset.target);
+        const action = btn.dataset.action;
+        if (action === 'maximize') {
+          win.classList.toggle('maximized');
+        } else { // minimize or close both hide the window
+          win.style.display = 'none';
+          if (win.id === 'win') taskLinks.classList.remove('active');
+        }
+      });
+    });
+
+    // ---------- Main window <-> taskbar ----------
     const win = document.getElementById('win');
-    const bar = document.getElementById('dragbar');
-    let offsetX = 0, offsetY = 0, isDragging = false;
-
-    bar.addEventListener('pointerdown', (e) => {
-      isDragging = true;
-      offsetX = e.clientX - win.offsetLeft;
-      offsetY = e.clientY - win.offsetTop;
-      bar.setPointerCapture(e.pointerId);
+    const taskLinks = document.getElementById('taskLinks');
+    taskLinks.addEventListener('click', () => {
+      const hidden = win.style.display === 'none';
+      win.style.display = hidden ? '' : 'none';
+      taskLinks.classList.toggle('active', hidden);
+      if (hidden) focusWindow(win);
     });
 
-    bar.addEventListener('pointermove', (e) => {
-      if (!isDragging) return;
-      win.style.left = (e.clientX - offsetX) + 'px';
-      win.style.top = (e.clientY - offsetY) + 'px';
-    });
-
-    bar.addEventListener('pointerup', () => { isDragging = false; });
-    bar.addEventListener('pointerleave', () => { isDragging = false; });
-
-    // Clock
+    // ---------- Clock ----------
     function updateClock() {
-      const clock = document.getElementById('clock');
       const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      clock.textContent = `${hours}:${minutes}`;
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}`;
     }
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Status bar hover messages
+    // ---------- Status bar hover messages ----------
     const statusText = document.getElementById('statusText');
-    const linkButtons = document.querySelectorAll('.btn-98');
-
-    linkButtons.forEach(btn => {
+    document.querySelectorAll('#win .btn-98').forEach((btn) => {
       const label = btn.textContent.trim();
-      btn.addEventListener('mouseenter', () => {
-        statusText.textContent = `Open ${label}`;
-      });
-      btn.addEventListener('mouseleave', () => {
-        statusText.textContent = 'Ready';
-      });
+      btn.addEventListener('mouseenter', () => { statusText.textContent = `Open ${label}`; });
+      btn.addEventListener('mouseleave', () => { statusText.textContent = 'Ready'; });
     });
 
-    // Start menu toggle
+    // ---------- Start menu ----------
     const startBtn = document.getElementById('startBtn');
     const startMenu = document.getElementById('startMenu');
-
     startBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isOpen = startMenu.style.display === 'block';
-      startMenu.style.display = isOpen ? 'none' : 'block';
+      startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
     });
-
     document.addEventListener('click', (e) => {
       if (!startMenu.contains(e.target) && !startBtn.contains(e.target)) {
         startMenu.style.display = 'none';
       }
     });
 
-    // About dialog
-    const aboutBtn = document.getElementById('aboutBtn');
+    // ---------- About dialog ----------
     const aboutDialog = document.getElementById('aboutDialog');
-    const aboutOk = document.getElementById('aboutOk');
-    const aboutClose = document.getElementById('aboutClose');
-
-    function closeAbout() {
-      aboutDialog.style.display = 'none';
-    }
-
-    aboutBtn.addEventListener('click', () => {
+    const closeAbout = () => { aboutDialog.style.display = 'none'; };
+    document.getElementById('aboutBtn').addEventListener('click', () => {
       startMenu.style.display = 'none';
       aboutDialog.style.display = 'flex';
     });
+    document.getElementById('aboutOk').addEventListener('click', closeAbout);
+    document.getElementById('aboutClose').addEventListener('click', closeAbout);
+    aboutDialog.addEventListener('click', (e) => { if (e.target === aboutDialog) closeAbout(); });
 
-    aboutOk.addEventListener('click', closeAbout);
-    aboutClose.addEventListener('click', closeAbout);
+    // ---------- Overwatch window + live rank ----------
+    const owWin = document.getElementById('owWin');
+    const owRanks = document.getElementById('owRanks');
+    const owStatus = document.getElementById('owStatus');
+    const owSeason = document.getElementById('owSeason');
+    const owName = document.getElementById('owName');
+    const owAvatar = document.getElementById('owAvatar');
+    const owProfileLink = document.getElementById('owProfileLink');
+    let owLoaded = false;
 
-    aboutDialog.addEventListener('click', (e) => {
-      if (e.target === aboutDialog) {
-        closeAbout();
+    const playerId = OW_BATTLETAG.trim().replace('#', '-');
+    owProfileLink.href = `https://overwatch.blizzard.com/en-us/career/${encodeURIComponent(playerId)}/`;
+
+    function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+    function roleCard(label, data) {
+      if (!data) {
+        return `<div class="ow-role"><span class="ow-role-label">${label}</span>` +
+               `<span class="ow-rank-text">Unranked</span></div>`;
       }
+      const icon = data.rank_icon
+        ? `<img class="ow-rank-icon" src="${data.rank_icon}" alt="${cap(data.division)} ${data.tier}" />`
+        : '';
+      return `<div class="ow-role">${icon}<span class="ow-role-label">${label}</span>` +
+             `<span class="ow-rank-text">${cap(data.division)} ${data.tier}</span></div>`;
+    }
+
+    function message(text) {
+      owRanks.innerHTML = `<p class="ow-message" style="grid-column: 1 / -1;">${text}</p>`;
+    }
+
+    async function loadOverwatch() {
+      if (owLoaded) return;
+      if (/-0000$/.test(playerId) || !/-\d+$/.test(playerId)) {
+        message("BattleTag not set yet. Add your full tag (e.g. zaynonfire#21534) in the page source.");
+        owStatus.textContent = 'Not configured';
+        return;
+      }
+      message('Loading…');
+      owStatus.textContent = 'Fetching…';
+      try {
+        const res = await fetch(`https://overfast-api.tekrop.fr/players/${encodeURIComponent(playerId)}/summary`);
+        if (res.status === 404) {
+          message("Profile not found. Check the BattleTag is correct.");
+          owStatus.textContent = 'Not found';
+          return;
+        }
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        if (data.username) owName.textContent = data.username;
+        if (data.avatar) owAvatar.style.backgroundImage = `url('${data.avatar}')`;
+
+        const comp = data.competitive && data.competitive.pc;
+        if (!comp || (!comp.tank && !comp.damage && !comp.support && !comp.open)) {
+          message("No competitive rank this season (profile may be private, or no placements yet).");
+          owStatus.textContent = 'Done';
+          owLoaded = true;
+          return;
+        }
+
+        owRanks.innerHTML =
+          roleCard('Tank', comp.tank) +
+          roleCard('Damage', comp.damage) +
+          roleCard('Support', comp.support);
+        owSeason.textContent = comp.season ? 'Season ' + comp.season : '';
+        owStatus.textContent = 'Live';
+        owLoaded = true;
+      } catch (err) {
+        message("Couldn't load rank right now. Try again later.");
+        owStatus.textContent = 'Offline';
+      }
+    }
+
+    function openOverwatch() {
+      owWin.style.display = '';
+      focusWindow(owWin);
+      startMenu.style.display = 'none';
+      loadOverwatch();
+    }
+
+    const owIconLink = document.getElementById('owIconLink');
+    owIconLink.addEventListener('click', openOverwatch);
+    owIconLink.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openOverwatch(); }
     });
+    document.getElementById('owMenuBtn').addEventListener('click', openOverwatch);
+
+    // ---------- Minesweeper (classic 9x9, 10 mines) ----------
+    (function () {
+      const ROWS = 9, COLS = 9, MINES = 10, TOTAL = ROWS * COLS;
+      const grid = document.getElementById('msGrid');
+      const minesLed = document.getElementById('msMines');
+      const timerLed = document.getElementById('msTimer');
+      const face = document.getElementById('msFace');
+      const msWin = document.getElementById('msWin');
+
+      let cells, mine, revealed, flagged, counts;
+      let started, over, revealedCount, flags, timer, timerId;
+
+      const pad = (n) => String(Math.max(0, Math.min(999, n))).padStart(3, '0');
+      const idx = (r, c) => r * COLS + c;
+      const inBounds = (r, c) => r >= 0 && r < ROWS && c >= 0 && c < COLS;
+      function neighbors(r, c) {
+        const out = [];
+        for (let dr = -1; dr <= 1; dr++)
+          for (let dc = -1; dc <= 1; dc++)
+            if ((dr || dc) && inBounds(r + dr, c + dc)) out.push([r + dr, c + dc]);
+        return out;
+      }
+
+      function build() {
+        grid.innerHTML = '';
+        cells = []; mine = []; revealed = []; flagged = []; counts = [];
+        started = false; over = false; revealedCount = 0; flags = 0; timer = 0;
+        clearInterval(timerId); timerId = null;
+        minesLed.textContent = pad(MINES);
+        timerLed.textContent = pad(0);
+        face.textContent = '🙂';
+        for (let i = 0; i < TOTAL; i++) {
+          mine[i] = false; revealed[i] = false; flagged[i] = false; counts[i] = 0;
+          const btn = document.createElement('button');
+          btn.className = 'ms-cell';
+          btn.dataset.i = i;
+          cells[i] = btn;
+          grid.appendChild(btn);
+        }
+      }
+
+      function placeMines(safe) {
+        let placed = 0;
+        while (placed < MINES) {
+          const i = Math.floor(Math.random() * TOTAL);
+          if (i === safe || mine[i]) continue;
+          mine[i] = true; placed++;
+        }
+        for (let r = 0; r < ROWS; r++)
+          for (let c = 0; c < COLS; c++)
+            if (!mine[idx(r, c)])
+              counts[idx(r, c)] = neighbors(r, c).filter(([nr, nc]) => mine[idx(nr, nc)]).length;
+      }
+
+      function reveal(i) {
+        if (revealed[i] || flagged[i]) return;
+        revealed[i] = true; revealedCount++;
+        const btn = cells[i];
+        btn.classList.add('revealed');
+        if (counts[i] > 0) {
+          btn.textContent = counts[i];
+          btn.classList.add('n' + counts[i]);
+        } else {
+          const r = Math.floor(i / COLS), c = i % COLS;
+          neighbors(r, c).forEach(([nr, nc]) => reveal(idx(nr, nc)));
+        }
+      }
+
+      function lose(hit) {
+        over = true; clearInterval(timerId);
+        for (let i = 0; i < TOTAL; i++) {
+          if (mine[i]) { cells[i].classList.add('revealed', 'mine'); cells[i].textContent = '💣'; }
+          else if (flagged[i]) { cells[i].textContent = '❌'; }
+        }
+        cells[hit].classList.add('exploded');
+        face.textContent = '😵';
+      }
+
+      function win() {
+        over = true; clearInterval(timerId);
+        face.textContent = '😎';
+        for (let i = 0; i < TOTAL; i++)
+          if (mine[i] && !flagged[i]) { flagged[i] = true; cells[i].textContent = '🚩'; }
+        minesLed.textContent = pad(0);
+      }
+
+      function onLeft(i) {
+        if (over || flagged[i] || revealed[i]) return;
+        if (!started) {
+          placeMines(i);
+          started = true;
+          timerId = setInterval(() => { timer = Math.min(999, timer + 1); timerLed.textContent = pad(timer); }, 1000);
+        }
+        if (mine[i]) { lose(i); return; }
+        reveal(i);
+        if (revealedCount === TOTAL - MINES) win();
+      }
+
+      function onRight(i) {
+        if (over || revealed[i]) return;
+        flagged[i] = !flagged[i];
+        cells[i].textContent = flagged[i] ? '🚩' : '';
+        flags += flagged[i] ? 1 : -1;
+        minesLed.textContent = pad(MINES - flags);
+      }
+
+      grid.addEventListener('click', (e) => {
+        const t = e.target.closest('.ms-cell'); if (t) onLeft(+t.dataset.i);
+      });
+      grid.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const t = e.target.closest('.ms-cell'); if (t) onRight(+t.dataset.i);
+      });
+      face.addEventListener('click', build);
+      build();
+
+      function openMinesweeper() {
+        msWin.style.display = '';
+        focusWindow(msWin);
+        startMenu.style.display = 'none';
+      }
+      const msIconLink = document.getElementById('msIconLink');
+      msIconLink.addEventListener('click', openMinesweeper);
+      msIconLink.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMinesweeper(); }
+      });
+      document.getElementById('msMenuBtn').addEventListener('click', openMinesweeper);
+    })();
   </script>
 </body>
 </html>
