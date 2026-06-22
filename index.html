@@ -41,7 +41,7 @@
       position: absolute;
       top: 12px;
       left: 12px;
-      bottom: 48px;
+      bottom: 56px;
       display: flex;
       flex-direction: column;
       flex-wrap: wrap;
@@ -102,7 +102,7 @@
       top: 0 !important;
       left: 0 !important;
       width: 100%;
-      height: calc(100% - 36px);
+      height: calc(100% - 44px);
       transform: none !important;
     }
 
@@ -266,6 +266,70 @@
 
     .ow-profile-link { color: var(--link); font-size: .85rem; }
 
+    /* Media player (Winamp-style) */
+    .mp-screen {
+      font-family: "Courier New", monospace;
+      background: #0b0f17;
+      color: #1ed760;
+      padding: 6px 8px;
+      border: 2px solid;
+      border-color: var(--shadow) var(--light) var(--light) var(--shadow);
+      margin-bottom: 10px;
+      font-size: .8rem;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .mp-screen span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: mp-scroll 14s linear infinite;
+    }
+    @keyframes mp-scroll { to { transform: translateX(-100%); } }
+
+    .mp-embed { width: 100%; height: 352px; border: 0; display: block; border-radius: 4px; }
+
+    /* Boot splash */
+    .boot {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    .boot.hidden { opacity: 0; visibility: hidden; transition: opacity .5s ease; }
+    .boot-inner { text-align: center; color: #fff; font-family: Tahoma, system-ui, sans-serif; }
+    .boot-logo { font-size: 2rem; font-weight: 700; }
+    .boot-sub { color: #5a8fc5; letter-spacing: 5px; margin: 10px 0 26px; font-size: .8rem; }
+    .boot-bar { width: 220px; height: 18px; border: 2px solid #fff; margin: 0 auto; padding: 2px; }
+    .boot-bar-fill {
+      height: 100%;
+      width: 0;
+      background: repeating-linear-gradient(90deg, #000080 0 10px, #3a6ea5 10px 14px);
+      animation: boot-fill 2.2s ease forwards;
+    }
+    @keyframes boot-fill { to { width: 100%; } }
+
+    /* CRT scanline overlay */
+    .crt {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9000;
+      background: repeating-linear-gradient(
+        rgba(0, 0, 0, 0) 0 2px,
+        rgba(0, 0, 0, 0.13) 2px 4px
+      );
+      animation: crt-flicker 6s infinite;
+    }
+    @keyframes crt-flicker { 0%, 100% { opacity: .55; } 50% { opacity: .7; } }
+    body.no-crt .crt { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .crt { animation: none; }
+      .boot-bar-fill { animation-duration: .8s; }
+    }
+
     /* Minesweeper */
     .ms-body { padding: 8px; }
 
@@ -357,7 +421,7 @@
     .ms-cell.n8 { color: #7b7b7b; }
 
     .taskbar {
-      height: 36px;
+      height: 44px;
       background: var(--taskbar);
       border-top: 2px solid var(--dark);
       box-shadow: inset 0 1px 0 var(--light);
@@ -422,7 +486,7 @@
     /* Start menu */
     .start-menu {
       position: fixed;
-      bottom: 36px;
+      bottom: 44px;
       left: 4px;
       width: 220px;
       background: var(--face);
@@ -569,6 +633,14 @@
         </div>
       </div>
 
+      <!-- Media Player: opens a Winamp-style window with the Spotify playlist -->
+      <div class="icon-link" id="mpIconLink" role="button" tabindex="0">
+        <div class="icon">
+          <img src="img/player.svg" alt="Media Player icon" />
+          <span>Media Player</span>
+        </div>
+      </div>
+
       <!-- Overwatch: opens an in-page window instead of navigating away -->
       <div class="icon-link" id="owIconLink" role="button" tabindex="0">
         <div class="icon">
@@ -600,7 +672,7 @@
             <a class="btn-98" href="https://www.tiktok.com/@zayninrevolt" target="_blank" rel="noopener">TikTok</a>
             <a class="btn-98" href="https://www.instagram.com/zayninrevolt" target="_blank" rel="noopener">Instagram</a>
             <a class="btn-98" href="https://www.youtube.com/@zaynonfire" target="_blank" rel="noopener">YouTube</a>
-            <a class="btn-98" href="https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA?si=Zc_3ZtKqT0Sm36SUb8KyPQ" target="_blank" rel="noopener">Spotify Playlist</a>
+            <a class="btn-98" id="spotifyBtn" href="#" role="button">Spotify Playlist</a>
             <a class="btn-98" href="https://discord.com/users/just.zayn" target="_blank" rel="noopener">Discord</a>
             <a class="btn-98" href="https://dokkadoki.co.uk" target="_blank" rel="noopener">DokkaDoki</a>
           </div>
@@ -663,6 +735,35 @@
       </section>
     </main>
 
+    <!-- Media Player window (Spotify embed, hidden until icon is clicked) -->
+    <main class="window" id="mpWin" style="display: none; top: 70px; width: min(420px, 92vw);">
+      <div class="title-bar">
+        <span class="title-icon">🎵</span>
+        <div class="title-text">Media Player — ZaynFM</div>
+        <div class="title-controls">
+          <div class="control-btn" data-action="close" data-target="mpWin" title="Close">✕</div>
+        </div>
+      </div>
+      <section class="window-body">
+        <div class="mp-screen"><span>♪♪♪ NOW PLAYING — ZayninRevolt's Spotify playlist — crank it up ♪♪♪</span></div>
+        <iframe class="mp-embed" title="Spotify player" loading="lazy"
+          data-src="https://open.spotify.com/embed/playlist/32JiIjyJ5ctyqG7LkSZaFA?utm_source=generator&theme=0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      </section>
+    </main>
+
+    <!-- CRT scanline overlay -->
+    <div id="crt" class="crt"></div>
+
+    <!-- Boot splash -->
+    <div id="boot" class="boot">
+      <div class="boot-inner">
+        <div class="boot-logo">🪟 Windows 98</div>
+        <div class="boot-sub">Z A Y N O S</div>
+        <div class="boot-bar"><div class="boot-bar-fill"></div></div>
+      </div>
+    </div>
+
     <!-- Taskbar -->
     <footer class="taskbar">
       <div class="start-btn" id="startBtn">🪟 Start</div>
@@ -677,6 +778,8 @@
         <button class="start-item" id="aboutBtn">About ZayninRevolt…</button>
         <button class="start-item" id="owMenuBtn">Overwatch Rank…</button>
         <button class="start-item" id="msMenuBtn">Minesweeper</button>
+        <button class="start-item" id="mpMenuBtn">Media Player…</button>
+        <button class="start-item" id="crtBtn">CRT effect: On</button>
         <button class="start-item" onclick="window.open('https://steamcommunity.com/id/ZaynOnFire','_blank','noopener')">
           Open Steam Profile
         </button>
@@ -740,7 +843,7 @@
       bar.addEventListener('pointermove', (e) => {
         if (!dragging) return;
         const maxX = window.innerWidth - win.offsetWidth;
-        const maxY = window.innerHeight - 36 - 28; // keep title bar above taskbar
+        const maxY = window.innerHeight - 44 - 28; // keep title bar above taskbar
         let left = e.clientX - offsetX;
         let top = e.clientY - offsetY;
         left = Math.min(Math.max(0, left), Math.max(0, maxX));
@@ -1039,6 +1142,49 @@
       });
       document.getElementById('msMenuBtn').addEventListener('click', openMinesweeper);
     })();
+
+    // ---------- Media player (lazy-loads the Spotify embed on first open) ----------
+    const mpWin = document.getElementById('mpWin');
+    const mpEmbed = mpWin.querySelector('.mp-embed');
+    function openMediaPlayer() {
+      if (!mpEmbed.src) mpEmbed.src = mpEmbed.dataset.src;
+      mpWin.style.display = '';
+      focusWindow(mpWin);
+      startMenu.style.display = 'none';
+    }
+    const mpIconLink = document.getElementById('mpIconLink');
+    mpIconLink.addEventListener('click', openMediaPlayer);
+    mpIconLink.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMediaPlayer(); }
+    });
+    document.getElementById('mpMenuBtn').addEventListener('click', openMediaPlayer);
+    document.getElementById('spotifyBtn').addEventListener('click', (e) => { e.preventDefault(); openMediaPlayer(); });
+
+    // ---------- CRT effect toggle (persisted) ----------
+    const crtBtn = document.getElementById('crtBtn');
+    function applyCrt(on) {
+      document.body.classList.toggle('no-crt', !on);
+      crtBtn.textContent = 'CRT effect: ' + (on ? 'On' : 'Off');
+    }
+    applyCrt(localStorage.getItem('crt') !== 'off');
+    crtBtn.addEventListener('click', () => {
+      const turnOn = document.body.classList.contains('no-crt'); // currently off -> turn on
+      localStorage.setItem('crt', turnOn ? 'on' : 'off');
+      applyCrt(turnOn);
+      startMenu.style.display = 'none';
+    });
+
+    // ---------- Boot splash (shows once per browser session) ----------
+    const boot = document.getElementById('boot');
+    if (sessionStorage.getItem('booted')) {
+      boot.remove();
+    } else {
+      setTimeout(() => {
+        boot.classList.add('hidden');
+        sessionStorage.setItem('booted', '1');
+        setTimeout(() => boot.remove(), 600);
+      }, 2400);
+    }
   </script>
 </body>
 </html>
