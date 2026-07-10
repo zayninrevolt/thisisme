@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Links • ZayninRevolt</title>
   <meta name="description" content="A tiny Windows 98–style link-in-bio page for TikTok, Instagram, YouTube, Spotify, Steam and Overwatch." />
+  <link rel="icon" href="img/profile.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ZayninRevolt — My Links" />
+  <meta property="og:description" content="Gamer, creator, and owner of this tiny cursed Windows 98 desktop. Click the icons, follow the links." />
+  <meta property="og:url" content="https://justzayn.com/" />
+  <meta property="og:image" content="https://justzayn.com/img/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <style>
     :root {
       --face: #c0c0c0;
@@ -399,6 +408,8 @@
       border-color: var(--light) var(--shadow) var(--shadow) var(--light);
       cursor: default;
       user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: manipulation;
       font-family: "Courier New", monospace;
     }
 
@@ -592,7 +603,8 @@
         overflow-x: auto;
         padding-bottom: 4px;
       }
-      .icon { width: 64px; margin: 4px; }
+      .icon { width: 76px; margin: 4px 2px; }
+      .icon span { font-size: .68rem; }
       .window { top: 130px; }
       .ow-rank-icon { width: 32px; height: 32px; }
       .avatar { width: 56px; height: 56px; }
@@ -820,6 +832,20 @@
       win.style.zIndex = ++zCounter;
     }
 
+    // Open a window; on small screens cascade it below the icon strip so
+    // title bars stay reachable instead of stacking dead-centre.
+    let cascade = 0;
+    function openWindow(win) {
+      win.style.display = '';
+      if (window.innerWidth <= 600 && !win.dataset.placed) {
+        cascade = (cascade + 1) % 4;
+        win.style.top = (150 + cascade * 30) + 'px';
+        win.dataset.placed = '1';
+      }
+      focusWindow(win);
+      startMenu.style.display = 'none';
+    }
+
     function makeDraggable(win) {
       const bar = win.querySelector('.title-bar');
       let offsetX = 0, offsetY = 0, dragging = false;
@@ -1001,9 +1027,7 @@
     }
 
     function openOverwatch() {
-      owWin.style.display = '';
-      focusWindow(owWin);
-      startMenu.style.display = 'none';
+      openWindow(owWin);
       loadOverwatch();
     }
 
@@ -1121,19 +1145,32 @@
       }
 
       grid.addEventListener('click', (e) => {
+        if (longPressed) { longPressed = false; return; } // flag placed, don't also reveal
         const t = e.target.closest('.ms-cell'); if (t) onLeft(+t.dataset.i);
       });
       grid.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         const t = e.target.closest('.ms-cell'); if (t) onRight(+t.dataset.i);
       });
+
+      // Touch: long-press a cell to flag it (right-click equivalent)
+      let pressTimer = null, longPressed = false;
+      grid.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse') return;
+        const t = e.target.closest('.ms-cell'); if (!t) return;
+        pressTimer = setTimeout(() => {
+          longPressed = true;
+          onRight(+t.dataset.i);
+          if (navigator.vibrate) navigator.vibrate(15);
+        }, 350);
+      });
+      ['pointerup', 'pointercancel', 'pointermove'].forEach((ev) =>
+        grid.addEventListener(ev, () => clearTimeout(pressTimer)));
       face.addEventListener('click', build);
       build();
 
       function openMinesweeper() {
-        msWin.style.display = '';
-        focusWindow(msWin);
-        startMenu.style.display = 'none';
+        openWindow(msWin);
       }
       const msIconLink = document.getElementById('msIconLink');
       msIconLink.addEventListener('click', openMinesweeper);
@@ -1148,9 +1185,7 @@
     const mpEmbed = mpWin.querySelector('.mp-embed');
     function openMediaPlayer() {
       if (!mpEmbed.src) mpEmbed.src = mpEmbed.dataset.src;
-      mpWin.style.display = '';
-      focusWindow(mpWin);
-      startMenu.style.display = 'none';
+      openWindow(mpWin);
     }
     const mpIconLink = document.getElementById('mpIconLink');
     mpIconLink.addEventListener('click', openMediaPlayer);
