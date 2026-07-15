@@ -61,6 +61,14 @@
 
     .icon-link { text-decoration: none; }
 
+    button.icon-link {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      font: inherit;
+    }
+
     .icon {
       width: 72px;
       display: flex;
@@ -89,6 +97,26 @@
 
     .icon:hover { filter: brightness(1.2); }
     .icon:active { transform: translateY(1px); }
+
+    .icon-link:focus-visible .icon,
+    .control-btn:focus-visible,
+    .start-btn:focus-visible,
+    .task:focus-visible {
+      outline: 2px dotted #fff;
+      outline-offset: 2px;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     .window {
       width: min(560px, 92vw);
@@ -163,6 +191,8 @@
       cursor: pointer;
       line-height: 0;
       color: #000;
+      padding: 0;
+      font: inherit;
     }
 
     .control-btn:active {
@@ -170,6 +200,35 @@
         inset 1px 1px 0 var(--shadow),
         inset -1px -1px 0 var(--light);
     }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .game-card {
+      min-width: 0;
+      padding: 8px;
+      background: var(--face);
+      border: 2px solid var(--dark);
+      box-shadow: inset -1px -1px 0 var(--shadow), inset 1px 1px 0 var(--light);
+      text-align: center;
+    }
+
+    .game-card img {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      border: 1px solid #000;
+    }
+
+    .game-card strong { display: block; margin-top: 6px; }
+    .game-card span { display: block; margin-top: 3px; font-size: .75rem; color: #333; }
+    .games-actions { display: flex; justify-content: center; }
+
+    .icons-fade,
+    .icons-hint { display: none; }
 
     .window-body { padding: 14px; display: grid; gap: 14px; }
 
@@ -462,6 +521,8 @@
         inset 1px 1px 0 var(--light);
       font-weight: 700;
       cursor: default;
+      color: #000;
+      font: inherit;
     }
 
     .start-btn:active {
@@ -482,6 +543,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
       cursor: default;
+      color: #000;
+      font-family: inherit;
+      text-align: left;
     }
 
     .task.active {
@@ -604,6 +668,29 @@
         bottom: auto;
         overflow-x: auto;
         padding-bottom: 4px;
+        scrollbar-width: thin;
+      }
+      .icons-fade {
+        display: block;
+        position: absolute;
+        z-index: 2;
+        top: 12px;
+        right: 12px;
+        width: 34px;
+        height: 76px;
+        pointer-events: none;
+        background: linear-gradient(90deg, transparent, #202020 88%);
+      }
+      .icons-hint {
+        display: block;
+        position: absolute;
+        z-index: 3;
+        top: 92px;
+        right: 15px;
+        color: #fff;
+        font-size: .62rem;
+        text-shadow: 1px 1px #000;
+        pointer-events: none;
       }
       .icon { width: 76px; margin: 4px 2px; }
       .icon span { font-size: .68rem; }
@@ -611,47 +698,60 @@
       .ow-rank-icon { width: 32px; height: 32px; }
       .avatar { width: 56px; height: 56px; }
       .title-text { font-size: .95rem; }
+      .games-grid { grid-template-columns: 1fr; }
+      .game-card { display: grid; grid-template-columns: 58px 1fr; column-gap: 10px; text-align: left; align-items: center; }
+      .game-card img { width: 58px; height: 58px; grid-row: 1 / 3; }
+      .game-card strong { margin-top: 0; }
+      #twWin {
+        position: fixed;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: calc(100% - 44px);
+        transform: none !important;
+      }
+      #twWin .window-body {
+        height: calc(100% - 28px);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+      }
+      #twWin .tw-embed { flex: 1; min-height: 0; height: 100%; aspect-ratio: auto; }
     }
   </style>
 </head>
 <body>
   <div class="desktop">
+    <h1 class="visually-hidden">ZayninRevolt — links, streams and games</h1>
     <!-- Desktop icons -->
     <div class="icons">
       <!-- Overwatch: opens an in-page window instead of navigating away -->
-      <div class="icon-link" id="owIconLink" role="button" tabindex="0">
+      <button class="icon-link" id="owIconLink" type="button" aria-label="Open Overwatch rank window">
         <div class="icon">
           <img src="img/overwatch.svg" alt="Overwatch icon" />
           <span>Overwatch</span>
         </div>
-      </div>
+      </button>
 
       <!-- Twitch: opens an in-page stream window -->
-      <div class="icon-link" id="twIconLink" role="button" tabindex="0">
+      <button class="icon-link" id="twIconLink" type="button" aria-label="Open Twitch stream window">
         <div class="icon">
           <img src="img/twitch.svg" alt="Twitch icon" />
           <span id="twIconLabel">Twitch</span>
         </div>
-      </div>
+      </button>
 
-      <a class="icon-link" href="https://store.steampowered.com/app/570/Dota_2/" target="_blank" rel="noopener">
+      <button class="icon-link" id="gamesIconLink" type="button" aria-label="Open Games I Play window">
         <div class="icon">
           <img src="img/dota.jpg" alt="Dota 2 icon" />
-          <span>Dota 2</span>
+          <span>Games I Play</span>
         </div>
-      </a>
+      </button>
 
-      <a class="icon-link" href="https://store.steampowered.com/app/892970/Valheim/" target="_blank" rel="noopener">
+      <a class="icon-link" href="https://dokkadoki.co.uk" target="_blank" rel="noopener">
         <div class="icon">
-          <img src="img/val.jpg" alt="Valheim icon" />
-          <span>Valheim</span>
-        </div>
-      </a>
-
-      <a class="icon-link" href="https://store.steampowered.com/app/739630/Phasmophobia/" target="_blank" rel="noopener">
-        <div class="icon">
-          <img src="img/phas.jpg" alt="Phasmophobia icon" />
-          <span>Phasmophobia</span>
+          <img src="img/dokkadoki.png" alt="DokkaDoki logo" style="object-fit: contain; background: #fff;" />
+          <span>DokkaDoki</span>
         </div>
       </a>
 
@@ -663,21 +763,23 @@
       </a>
 
       <!-- Minesweeper: opens a playable in-page game window -->
-      <div class="icon-link" id="msIconLink" role="button" tabindex="0">
+      <button class="icon-link" id="msIconLink" type="button" aria-label="Open Minesweeper">
         <div class="icon">
           <img src="img/minesweeper.png" alt="Minesweeper icon" />
           <span>Minesweeper</span>
         </div>
-      </div>
+      </button>
 
       <!-- Media Player: opens a Winamp-style window with the Spotify playlist -->
-      <div class="icon-link" id="mpIconLink" role="button" tabindex="0">
+      <button class="icon-link" id="mpIconLink" type="button" aria-label="Open Media Player">
         <div class="icon">
           <img src="img/player.svg" alt="Media Player icon" />
           <span>Media Player</span>
         </div>
-      </div>
+      </button>
     </div>
+    <div class="icons-fade" aria-hidden="true"></div>
+    <div class="icons-hint" aria-hidden="true">Swipe →</div>
 
     <!-- Main "My Links" window -->
     <main class="window" id="win">
@@ -685,9 +787,9 @@
         <span class="title-icon">🗂️</span>
         <div class="title-text">My Links</div>
         <div class="title-controls">
-          <div class="control-btn" data-action="minimize" data-target="win" title="Minimize">_</div>
-          <div class="control-btn" data-action="maximize" data-target="win" title="Maximize">▢</div>
-          <div class="control-btn" data-action="close" data-target="win" title="Close">✕</div>
+          <button class="control-btn" type="button" data-action="minimize" data-target="win" aria-label="Minimize My Links">_</button>
+          <button class="control-btn" type="button" data-action="maximize" data-target="win" aria-label="Maximize My Links">▢</button>
+          <button class="control-btn" type="button" data-action="close" data-target="win" aria-label="Close My Links">✕</button>
         </div>
       </div>
       <section class="window-body">
@@ -720,7 +822,7 @@
         <span class="title-icon">🎮</span>
         <div class="title-text">Overwatch — Zayn</div>
         <div class="title-controls">
-          <div class="control-btn" data-action="close" data-target="owWin" title="Close">✕</div>
+          <button class="control-btn" type="button" data-action="close" data-target="owWin" aria-label="Close Overwatch window">✕</button>
         </div>
       </div>
       <section class="window-body">
@@ -750,7 +852,7 @@
         <span class="title-icon">💣</span>
         <div class="title-text">Minesweeper</div>
         <div class="title-controls">
-          <div class="control-btn" data-action="close" data-target="msWin" title="Close">✕</div>
+          <button class="control-btn" type="button" data-action="close" data-target="msWin" aria-label="Close Minesweeper">✕</button>
         </div>
       </div>
       <section class="window-body ms-body">
@@ -771,7 +873,7 @@
         <span class="title-icon">🎵</span>
         <div class="title-text">Media Player — ZaynFM</div>
         <div class="title-controls">
-          <div class="control-btn" data-action="close" data-target="mpWin" title="Close">✕</div>
+          <button class="control-btn" type="button" data-action="close" data-target="mpWin" aria-label="Close Media Player">✕</button>
         </div>
       </div>
       <section class="window-body">
@@ -788,7 +890,7 @@
         <span class="title-icon">📺</span>
         <div class="title-text">Twitch — zaynonfire</div>
         <div class="title-controls">
-          <div class="control-btn" data-action="close" data-target="twWin" title="Close">✕</div>
+          <button class="control-btn" type="button" data-action="close" data-target="twWin" aria-label="Close Twitch stream">✕</button>
         </div>
       </div>
       <section class="window-body">
@@ -796,6 +898,27 @@
         <iframe class="tw-embed" title="Twitch stream" loading="lazy"
           data-src="https://player.twitch.tv/?channel=zaynonfire&parent=justzayn.com&parent=www.justzayn.com&parent=localhost&muted=true"
           allowfullscreen></iframe>
+      </section>
+    </main>
+
+    <!-- Games window (personal favourites rather than store shortcuts) -->
+    <main class="window" id="gamesWin" style="display: none; top: 75px; width: min(620px, 92vw);">
+      <div class="title-bar">
+        <span class="title-icon">🎮</span>
+        <div class="title-text">Games I Play</div>
+        <div class="title-controls">
+          <button class="control-btn" type="button" data-action="close" data-target="gamesWin" aria-label="Close Games I Play">✕</button>
+        </div>
+      </div>
+      <section class="window-body">
+        <div class="games-grid">
+          <div class="game-card"><img src="img/dota.jpg" alt="Dota 2"><strong>Dota 2</strong><span>Strategy, chaos and questionable team decisions.</span></div>
+          <div class="game-card"><img src="img/val.jpg" alt="Valheim"><strong>Valheim</strong><span>Viking survival, building and boss hunting.</span></div>
+          <div class="game-card"><img src="img/phas.jpg" alt="Phasmophobia"><strong>Phasmophobia</strong><span>Ghost hunting, usually with unnecessary screaming.</span></div>
+        </div>
+        <div class="games-actions">
+          <a class="btn-98-small" href="https://steamcommunity.com/id/ZaynOnFire" target="_blank" rel="noopener">View my Steam profile ↗</a>
+        </div>
       </section>
     </main>
 
@@ -813,8 +936,8 @@
 
     <!-- Taskbar -->
     <footer class="taskbar">
-      <div class="start-btn" id="startBtn">🪟 Start</div>
-      <div class="task active" id="taskLinks">📎 Links - Windows</div>
+      <button class="start-btn" type="button" id="startBtn" aria-haspopup="menu" aria-expanded="false">🪟 Start</button>
+      <button class="task active" type="button" id="taskLinks" aria-pressed="true">📎 Links - Windows</button>
       <time class="clock" id="clock">--:--</time>
     </footer>
 
@@ -825,6 +948,7 @@
         <button class="start-item" id="aboutBtn">About ZayninRevolt…</button>
         <button class="start-item" id="owMenuBtn">Overwatch Rank…</button>
         <button class="start-item" id="twMenuBtn">Twitch Stream…</button>
+        <button class="start-item" id="gamesMenuBtn">Games I Play…</button>
         <button class="start-item" id="msMenuBtn">Minesweeper</button>
         <button class="start-item" id="mpMenuBtn">Media Player…</button>
         <button class="start-item" id="crtBtn">CRT effect: On</button>
@@ -931,7 +1055,10 @@
           win.classList.toggle('maximized');
         } else { // minimize or close both hide the window
           win.style.display = 'none';
-          if (win.id === 'win') taskLinks.classList.remove('active');
+          if (win.id === 'win') {
+            taskLinks.classList.remove('active');
+            taskLinks.setAttribute('aria-pressed', 'false');
+          }
         }
       });
     });
@@ -943,6 +1070,7 @@
       const hidden = win.style.display === 'none';
       win.style.display = hidden ? '' : 'none';
       taskLinks.classList.toggle('active', hidden);
+      taskLinks.setAttribute('aria-pressed', String(hidden));
       if (hidden) focusWindow(win);
     });
 
@@ -969,13 +1097,26 @@
     const startMenu = document.getElementById('startMenu');
     startBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
+      const opening = startMenu.style.display !== 'block';
+      startMenu.style.display = opening ? 'block' : 'none';
+      startBtn.setAttribute('aria-expanded', String(opening));
     });
     document.addEventListener('click', (e) => {
       if (!startMenu.contains(e.target) && !startBtn.contains(e.target)) {
         startMenu.style.display = 'none';
+        startBtn.setAttribute('aria-expanded', 'false');
       }
     });
+
+    // Mobile affordance: retire the "Swipe" hint once the visitor explores the strip.
+    const iconsStrip = document.querySelector('.icons');
+    const iconsHint = document.querySelector('.icons-hint');
+    const iconsFade = document.querySelector('.icons-fade');
+    iconsStrip.addEventListener('scroll', () => {
+      const atEnd = iconsStrip.scrollLeft + iconsStrip.clientWidth >= iconsStrip.scrollWidth - 4;
+      iconsHint.style.opacity = iconsStrip.scrollLeft > 12 ? '0' : '1';
+      iconsFade.style.opacity = atEnd ? '0' : '1';
+    }, { passive: true });
 
     // ---------- About dialog ----------
     const aboutDialog = document.getElementById('aboutDialog');
@@ -1069,9 +1210,6 @@
 
     const owIconLink = document.getElementById('owIconLink');
     owIconLink.addEventListener('click', openOverwatch);
-    owIconLink.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openOverwatch(); }
-    });
     document.getElementById('owMenuBtn').addEventListener('click', openOverwatch);
 
     // ---------- Minesweeper (classic 9x9, 10 mines) ----------
@@ -1210,9 +1348,6 @@
       }
       const msIconLink = document.getElementById('msIconLink');
       msIconLink.addEventListener('click', openMinesweeper);
-      msIconLink.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMinesweeper(); }
-      });
       document.getElementById('msMenuBtn').addEventListener('click', openMinesweeper);
     })();
 
@@ -1225,9 +1360,6 @@
     }
     const mpIconLink = document.getElementById('mpIconLink');
     mpIconLink.addEventListener('click', openMediaPlayer);
-    mpIconLink.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMediaPlayer(); }
-    });
     document.getElementById('mpMenuBtn').addEventListener('click', openMediaPlayer);
     document.getElementById('spotifyBtn').addEventListener('click', (e) => { e.preventDefault(); openMediaPlayer(); });
 
@@ -1259,11 +1391,14 @@
     }
     const twIconLink = document.getElementById('twIconLink');
     twIconLink.addEventListener('click', openTwitch);
-    twIconLink.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openTwitch(); }
-    });
     document.getElementById('twMenuBtn').addEventListener('click', openTwitch);
     document.getElementById('twitchBtn').addEventListener('click', (e) => { e.preventDefault(); openTwitch(); });
+
+    // ---------- Games I Play window ----------
+    const gamesWin = document.getElementById('gamesWin');
+    function openGames() { openWindow(gamesWin); }
+    document.getElementById('gamesIconLink').addEventListener('click', openGames);
+    document.getElementById('gamesMenuBtn').addEventListener('click', openGames);
 
     // ---------- CRT effect toggle (persisted) ----------
     const crtBtn = document.getElementById('crtBtn');
