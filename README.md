@@ -20,13 +20,17 @@ Then open <http://localhost:8000>.
 Run:
 
 ```sh
+npm install
+npx playwright install chromium
 npm test
 ```
 
-The dependency-free Node test suite checks the document structure, dialog and
-focus-management hooks, Content Security Policy, local asset references,
-external-link safety, duplicate IDs, and inline event handlers. GitHub Actions
-runs the same checks for pushes and pull requests.
+The Node suite checks document structure, window and focus-management hooks,
+Content Security Policy, local module and asset references, external-link
+safety, duplicate IDs, reduced-motion behavior, and Minesweeper keyboard
+support. Playwright then exercises the important interactions in Chromium,
+including focus restoration, taskbar state, CSP errors, keyboard play, and lazy
+embeds. GitHub Actions runs both suites for pushes and pull requests.
 
 For a release, also verify the page in a real browser at mobile and desktop
 sizes. Test keyboard-only navigation, every simulated window, the About dialog,
@@ -36,9 +40,15 @@ external-service error states, and the browser console.
 
 - `index.html` — page content and security metadata
 - `styles.css` — Windows 98 visual design and responsive styles
-- `app.js` — window management, integrations, and Minesweeper
+- `app.js` — lightweight application bootstrap, clock, CRT, and boot behavior
+- `js/desktop.js` — windows, taskbar, Start menu, dragging, and focus management
+- `js/overwatch.js` — Overwatch profile loading and safe rendering
+- `js/minesweeper.js` — game state and pointer, touch, and keyboard controls
+- `js/media.js` — Twitch, Spotify, and games launch behavior
 - `img/` — local images and icons
 - `test/site.test.js` — dependency-free quality checks
+- `test/browser/site.spec.js` — browser-level interaction and CSP checks
+- `playwright.config.js` — local Chromium test server and runner configuration
 
 ## External services
 
@@ -51,6 +61,13 @@ The page connects to:
 
 The Content Security Policy in `index.html` allow-lists these services. Update
 the policy deliberately if an integration host changes.
+
+## Keyboard controls
+
+Use Tab to reach desktop icons, window controls, and taskbar buttons. The Start
+menu supports Up, Down, Home, End, and Escape. In Minesweeper, use the arrow
+keys to move between cells, Enter or Space to reveal a cell, and F to flag or
+unflag it.
 
 ## Deployment
 

@@ -14,7 +14,7 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; img-src 'self' data: https://*.tekrop.fr; style-src 'self' 'unsafe-inline'; script-src 'self' https://gc.zgo.at; connect-src 'self' https://overfast-api.tekrop.fr https://decapi.me https://justzayn.goatcounter.com; frame-src https://open.spotify.com https://player.twitch.tv; font-src 'self'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; img-src 'self' data: https://d15f34w2p8l1cc.cloudfront.net https://static.playoverwatch.com; style-src 'self'; script-src 'self' https://gc.zgo.at; connect-src 'self' https://overfast-api.tekrop.fr https://decapi.me https://justzayn.goatcounter.com; frame-src https://open.spotify.com https://player.twitch.tv; font-src 'self'; upgrade-insecure-requests">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -47,7 +47,7 @@
 
       <a class="icon-link" href="https://dokkadoki.co.uk" target="_blank" rel="noopener">
         <div class="icon">
-          <img src="img/dokkadoki.png" alt="DokkaDoki logo" style="object-fit: contain; background: #fff;" />
+          <img class="icon-contain" src="img/dokkadoki.png" alt="DokkaDoki logo" />
           <span>DokkaDoki</span>
         </div>
       </a>
@@ -79,14 +79,13 @@
     <div class="icons-hint" aria-hidden="true">Swipe →</div>
 
     <!-- Main "My Links" window -->
-    <section class="window" id="win" role="dialog" aria-labelledby="winTitle" tabindex="-1">
+    <section class="window" id="win" role="region" aria-labelledby="winTitle" tabindex="-1">
       <div class="title-bar">
-        <span class="title-icon">🗂️</span>
+        <span class="title-icon" aria-hidden="true">🗂️</span>
         <div class="title-text" id="winTitle">My Links</div>
         <div class="title-controls">
           <button class="control-btn" type="button" data-action="minimize" data-target="win" aria-label="Minimize My Links">_</button>
-          <button class="control-btn" type="button" data-action="maximize" data-target="win" aria-label="Maximize My Links">▢</button>
-          <button class="control-btn" type="button" data-action="close" data-target="win" aria-label="Close My Links">✕</button>
+          <button class="control-btn" type="button" data-action="maximize" data-target="win" aria-label="Maximize My Links" aria-pressed="false">▢</button>
         </div>
       </div>
       <section class="window-body">
@@ -114,9 +113,9 @@
     </section>
 
     <!-- Overwatch window (hidden until icon is clicked) -->
-    <section class="window" id="owWin" role="dialog" aria-labelledby="owWinTitle" tabindex="-1" style="display: none; top: 80px;">
+    <section class="window window-overwatch" id="owWin" role="region" aria-labelledby="owWinTitle" tabindex="-1" hidden>
       <div class="title-bar">
-        <span class="title-icon">🎮</span>
+        <span class="title-icon" aria-hidden="true">🎮</span>
         <div class="title-text" id="owWinTitle">Overwatch — Zayn</div>
         <div class="title-controls">
           <button class="control-btn" type="button" data-action="close" data-target="owWin" aria-label="Close Overwatch window">✕</button>
@@ -124,7 +123,7 @@
       </div>
       <section class="window-body">
         <div class="profile">
-          <div class="avatar" id="owAvatar" style="background-image: url('img/overwatch.svg'); background-color:#f99e1a;"></div>
+          <div class="avatar ow-avatar" id="owAvatar"></div>
           <div>
             <div class="username" id="owName">Zayn</div>
             <a class="ow-profile-link" id="owProfileLink" href="#" target="_blank" rel="noopener">View career profile ↗</a>
@@ -133,7 +132,7 @@
         <div class="group-box">
           <span class="group-title">Competitive Rank</span>
           <div class="ow-ranks" id="owRanks">
-            <p class="ow-message" style="grid-column: 1 / -1;">Loading…</p>
+            <p class="ow-message ow-message-wide">Loading…</p>
           </div>
           <div class="status-bar">
             <span id="owSeason"></span>
@@ -144,9 +143,9 @@
     </section>
 
     <!-- Minesweeper window (hidden until icon is clicked) -->
-    <section class="window" id="msWin" role="dialog" aria-labelledby="msWinTitle" tabindex="-1" style="display: none; width: auto; top: 90px;">
+    <section class="window window-minesweeper" id="msWin" role="region" aria-labelledby="msWinTitle" tabindex="-1" hidden>
       <div class="title-bar">
-        <span class="title-icon">💣</span>
+        <span class="title-icon" aria-hidden="true">💣</span>
         <div class="title-text" id="msWinTitle">Minesweeper</div>
         <div class="title-controls">
           <button class="control-btn" type="button" data-action="close" data-target="msWin" aria-label="Close Minesweeper">✕</button>
@@ -155,19 +154,21 @@
       <section class="window-body ms-body">
         <div class="ms-panel">
           <div class="ms-head">
-            <div class="ms-led" id="msMines">010</div>
-            <button class="ms-face" id="msFace" title="New game">🙂</button>
-            <div class="ms-led" id="msTimer">000</div>
+            <div class="ms-led" id="msMines" role="status" aria-label="Mines remaining">010</div>
+            <button class="ms-face" id="msFace" type="button" aria-label="Start a new game">🙂</button>
+            <div class="ms-led" id="msTimer" role="timer" aria-label="Elapsed seconds">000</div>
           </div>
-          <div class="ms-grid" id="msGrid" role="grid" aria-label="Minesweeper board"></div>
+          <p class="visually-hidden" id="msInstructions">Use arrow keys to move, Enter or Space to reveal, and F to flag a cell.</p>
+          <div class="ms-grid" id="msGrid" role="grid" aria-label="Minesweeper board" aria-describedby="msInstructions" aria-rowcount="9" aria-colcount="9"></div>
+          <p class="visually-hidden" id="msStatus" role="status" aria-live="polite"></p>
         </div>
       </section>
     </section>
 
     <!-- Media Player window (Spotify embed, hidden until icon is clicked) -->
-    <section class="window" id="mpWin" role="dialog" aria-labelledby="mpWinTitle" tabindex="-1" style="display: none; top: 70px; width: min(420px, 92vw);">
+    <section class="window window-media" id="mpWin" role="region" aria-labelledby="mpWinTitle" tabindex="-1" hidden>
       <div class="title-bar">
-        <span class="title-icon">🎵</span>
+        <span class="title-icon" aria-hidden="true">🎵</span>
         <div class="title-text" id="mpWinTitle">Media Player — ZaynFM</div>
         <div class="title-controls">
           <button class="control-btn" type="button" data-action="close" data-target="mpWin" aria-label="Close Media Player">✕</button>
@@ -182,9 +183,9 @@
     </section>
 
     <!-- Twitch window (live status + player embed, hidden until icon is clicked) -->
-    <section class="window" id="twWin" role="dialog" aria-labelledby="twWinTitle" tabindex="-1" style="display: none; top: 60px; width: min(560px, 92vw);">
+    <section class="window window-twitch" id="twWin" role="region" aria-labelledby="twWinTitle" tabindex="-1" hidden>
       <div class="title-bar">
-        <span class="title-icon">📺</span>
+        <span class="title-icon" aria-hidden="true">📺</span>
         <div class="title-text" id="twWinTitle">Twitch — zaynonfire</div>
         <div class="title-controls">
           <button class="control-btn" type="button" data-action="close" data-target="twWin" aria-label="Close Twitch stream">✕</button>
@@ -199,9 +200,9 @@
     </section>
 
     <!-- Games window (personal favourites rather than store shortcuts) -->
-    <section class="window" id="gamesWin" role="dialog" aria-labelledby="gamesWinTitle" tabindex="-1" style="display: none; top: 75px; width: min(620px, 92vw);">
+    <section class="window window-games" id="gamesWin" role="region" aria-labelledby="gamesWinTitle" tabindex="-1" hidden>
       <div class="title-bar">
-        <span class="title-icon">🎮</span>
+        <span class="title-icon" aria-hidden="true">🎮</span>
         <div class="title-text" id="gamesWinTitle">Games I Play</div>
         <div class="title-controls">
           <button class="control-btn" type="button" data-action="close" data-target="gamesWin" aria-label="Close Games I Play">✕</button>
@@ -232,9 +233,16 @@
     </div>
 
     <!-- Taskbar -->
-    <footer class="taskbar">
+    <footer class="taskbar" aria-label="Application windows">
       <button class="start-btn" type="button" id="startBtn" aria-haspopup="menu" aria-expanded="false">🪟 Start</button>
-      <button class="task active" type="button" id="taskLinks" aria-pressed="true">📎 Links - Windows</button>
+      <div class="tasks" role="group" aria-label="Window switcher">
+        <button class="task active" type="button" data-window-target="win" aria-controls="win" aria-pressed="true">📎 Links</button>
+        <button class="task" type="button" data-window-target="owWin" aria-controls="owWin" aria-pressed="false" hidden>🎮 Overwatch</button>
+        <button class="task" type="button" data-window-target="msWin" aria-controls="msWin" aria-pressed="false" hidden>💣 Minesweeper</button>
+        <button class="task" type="button" data-window-target="mpWin" aria-controls="mpWin" aria-pressed="false" hidden>🎵 Media</button>
+        <button class="task" type="button" data-window-target="twWin" aria-controls="twWin" aria-pressed="false" hidden>📺 Twitch</button>
+        <button class="task" type="button" data-window-target="gamesWin" aria-controls="gamesWin" aria-pressed="false" hidden>🎮 Games</button>
+      </div>
       <time class="clock" id="clock">--:--</time>
     </footer>
 
@@ -273,7 +281,7 @@
     </dialog>
   </main>
 
-  <script src="app.js" defer></script>
+  <script type="module" src="app.js"></script>
 
   <!-- GoatCounter analytics: JS-based, so bots/scrapers (which don't run JS) aren't counted.
        Requires the free "justzayn" site code registered at goatcounter.com. -->

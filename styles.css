@@ -73,6 +73,8 @@
       image-rendering: auto;
     }
 
+    .icon img.icon-contain { object-fit: contain; background: #fff; }
+
     .icon span {
       text-shadow: 1px 1px 0 #000;
       margin-top: 2px;
@@ -131,6 +133,12 @@
       height: calc(100% - 44px);
       transform: none !important;
     }
+
+    .window-overwatch { top: 80px; }
+    .window-minesweeper { top: 90px; width: auto; }
+    .window-media { top: 70px; width: min(420px, 92vw); }
+    .window-twitch { top: 60px; width: min(560px, 92vw); }
+    .window-games { top: 75px; width: min(620px, 92vw); }
 
     .title-bar {
       height: 28px;
@@ -234,6 +242,11 @@
         inset -1px -1px 0 var(--shadow),
         inset 1px 1px 0 var(--light);
       background: url('img/profile.png') center/cover no-repeat;
+    }
+
+    .ow-avatar {
+      background-image: url('img/overwatch.svg');
+      background-color: #f99e1a;
     }
 
     .username {
@@ -390,8 +403,12 @@
     @keyframes crt-flicker { 0%, 100% { opacity: .55; } 50% { opacity: .7; } }
     body.no-crt .crt { display: none; }
     @media (prefers-reduced-motion: reduce) {
-      .crt { animation: none; }
-      .boot-bar-fill { animation-duration: .8s; }
+      .crt,
+      .boot-bar-fill,
+      .mp-screen span { animation: none; }
+      .boot.hidden,
+      .icon { transition: none; }
+      .mp-screen span { padding-left: 0; }
     }
 
     /* Minesweeper */
@@ -441,11 +458,14 @@
     .ms-face:active { border-color: var(--shadow) var(--light) var(--light) var(--shadow); }
 
     .ms-grid {
-      display: grid;
-      grid-template-columns: repeat(9, 26px);
-      grid-template-rows: repeat(9, 26px);
       border: 3px solid;
       border-color: var(--shadow) var(--light) var(--light) var(--shadow);
+    }
+
+    .ms-row {
+      display: grid;
+      grid-template-columns: repeat(9, 26px);
+      height: 26px;
     }
 
     .ms-cell {
@@ -541,6 +561,16 @@
       font-family: inherit;
       text-align: left;
     }
+
+    .tasks {
+      display: flex;
+      min-width: 0;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .tasks .task { flex: 1 1 110px; min-width: 72px; }
 
     .task.active {
       box-shadow:

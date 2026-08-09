@@ -5,18 +5,41 @@ import { access } from 'node:fs/promises';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
+async function readLocalModuleSources(entry) {
+  const seen = new Set();
+  const chunks = [];
+
+  async function visit(url) {
+    if (seen.has(url.href)) return;
+    seen.add(url.href);
+    const source = await readFile(url, 'utf8');
+    chunks.push(source);
+    const imports = [...source.matchAll(/(?:import|export)\s+(?:[^'";]+?\s+from\s+)?['"](\.\.?\/[^'"]+)['"]/g)];
+    await Promise.all(imports.map((match) => visit(new URL(match[1], url))));
+  }
+
+  await visit(new URL(entry, import.meta.url));
+  return chunks;
+}
+
+async function readLocalModuleGraph(entry) {
+  return (await readLocalModuleSources(entry)).join('\n');
+}
+
 test('loads local styles and application code without inline blocks', () => {
   assert.match(html, /<link rel="stylesheet" href="styles\.css">/);
-  assert.match(html, /<script src="app\.js" defer><\/script>/);
+  assert.match(html, /<script type="module" src="app\.js"><\/script>/);
   assert.doesNotMatch(html, /<style>/);
   assert.doesNotMatch(html, /<script>\s/);
+  assert.doesNotMatch(html, /\sstyle="[^"]*"/i);
 });
 
-test('uses one page landmark and names each simulated window as a dialog', () => {
+test('uses one page landmark and exposes simulated windows as named regions', () => {
   assert.equal((html.match(/<main\b/g) || []).length, 1);
-  const dialogs = html.match(/<section class="window"[^>]+role="dialog"[^>]*>/g) || [];
-  assert.equal(dialogs.length, 6);
-  for (const dialog of dialogs) assert.match(dialog, /aria-labelledby="[^"]+"/);
+  const windows = html.match(/<section class="[^"]*\bwindow\b[^"]*"[^>]+role="region"[^>]*>/g) || [];
+  assert.equal(windows.length, 6);
+  for (const window of windows) assert.match(window, /aria-labelledby="[^"]+"/);
+  assert.doesNotMatch(html, /<section class="[^"]*\bwindow\b[^"]*"[^>]+role="dialog"/);
 });
 
 test('uses an accessible native About dialog', () => {
@@ -30,10 +53,21 @@ test('defines a restrictive content security policy for required integrations', 
   assert.match(policy, /script-src 'self' https:\/\/gc\.zgo\.at/);
   assert.match(policy, /frame-src https:\/\/open\.spotify\.com https:\/\/player\.twitch\.tv/);
   assert.doesNotMatch(policy.match(/script-src[^;]+/)?.[0] || '', /'unsafe-inline'/);
+  const imagePolicy = policy.match(/img-src[^;]+/)?.[0] || '';
+  assert.match(imagePolicy, /https:\/\/d15f34w2p8l1cc\.cloudfront\.net/);
+  assert.match(imagePolicy, /https:\/\/static\.playoverwatch\.com/);
+  assert.doesNotMatch(policy.match(/style-src[^;]+/)?.[0] || '', /'unsafe-inline'/);
+});
+
+test('application entry point delegates distinct responsibilities to local modules', async () => {
+  const entry = await readFile(new URL('../app.js', import.meta.url), 'utf8');
+  const localImports = [...entry.matchAll(/import\s+(?:[^'";]+?\s+from\s+)?['"](\.\.?\/[^'"]+)['"]/g)];
+  assert.ok(localImports.length >= 3, 'app.js should compose at least three focused local modules');
+  await Promise.all(localImports.map((match) => access(new URL(match[1], new URL('../app.js', import.meta.url)))));
 });
 
 test('application code implements focus restoration, Escape handling, and request timeouts', async () => {
-  const js = await readFile(new URL('../app.js', import.meta.url), 'utf8');
+  const js = await readLocalModuleGraph('../app.js');
   assert.match(js, /previousFocus/);
   assert.match(js, /focusFirstControl/);
   assert.match(js, /event\.key !== 'Escape'/);
@@ -43,6 +77,35 @@ test('application code implements focus restoration, Escape handling, and reques
   assert.match(js, /safeHttpsUrl/);
   assert.match(js, /event\.key === 'ArrowDown'/);
   assert.match(js, /role', 'gridcell'/);
+});
+
+test('boot sequence skips its delay when reduced motion is requested', async () => {
+  const js = await readLocalModuleGraph('../app.js');
+  assert.match(js, /matchMedia\(['"]\(prefers-reduced-motion:\s*reduce\)['"]\)/);
+  assert.match(js, /prefersReducedMotion|reducedMotion/);
+});
+
+test('Minesweeper implements a roving tab stop and complete keyboard controls', async () => {
+  const modules = await readLocalModuleSources('../app.js');
+  const js = modules.find((source) => /getElementById\(['"]msGrid['"]\)/.test(source)) || '';
+  assert.ok(js, 'A local module should own the Minesweeper board behavior');
+  assert.match(js, /tabIndex\s*=\s*i\s*===\s*0\s*\?\s*0\s*:\s*-1|setAttribute\(['"]tabindex['"],\s*i\s*===\s*0\s*\?\s*['"]0['"]\s*:\s*['"]-1['"]\)/);
+  assert.match(js, /grid\.addEventListener\(['"]keydown['"]/);
+  for (const key of ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End']) {
+    assert.match(js, new RegExp(`['"]${key}['"]`), `Missing Minesweeper ${key} handling`);
+  }
+  assert.match(js, /event\.key\.toLowerCase\(\)\s*===\s*['"]f['"]|['"]f['"]\s*===\s*event\.key\.toLowerCase\(\)/);
+  assert.match(html, /id="msStatus"[^>]+role="status"[^>]+aria-live="polite"/);
+  assert.match(js, /msStatus/);
+});
+
+test('taskbar exposes a control for every simulated window', () => {
+  const windowIds = [...html.matchAll(/<section\b(?=[^>]*class="[^"]*\bwindow\b[^"]*")(?=[^>]*\bid="([^"]+)")[^>]*>/g)]
+    .map((match) => match[1]);
+  const taskTargets = [...html.matchAll(/<button\b(?=[^>]*class="[^"]*\btask\b[^"]*")(?=[^>]*\bdata-window-target="([^"]+)")[^>]*>/g)]
+    .map((match) => match[1]);
+  assert.deepEqual(new Set(taskTargets), new Set(windowIds));
+  assert.equal(taskTargets.length, windowIds.length);
 });
 
 test('all local page assets exist', async () => {
@@ -67,7 +130,7 @@ test('page avoids inline event handlers and duplicate IDs', () => {
 });
 
 test('application ID lookups all resolve to page elements', async () => {
-  const js = await readFile(new URL('../app.js', import.meta.url), 'utf8');
+  const js = await readLocalModuleGraph('../app.js');
   const pageIds = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]));
   const requestedIds = [...js.matchAll(/getElementById\('([^']+)'\)/g)].map((match) => match[1]);
   for (const id of requestedIds) assert.ok(pageIds.has(id), `Missing element #${id}`);
