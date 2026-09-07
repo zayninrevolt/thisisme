@@ -27,16 +27,16 @@ document.querySelectorAll('#win .btn-98').forEach((button) => {
 
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const crtButton = document.getElementById('crtBtn');
-function readStorage(storage, key) {
+function readStorage(storageName, key) {
   try {
-    return storage.getItem(key);
+    return window[storageName].getItem(key);
   } catch (_) {
     return null;
   }
 }
-function writeStorage(storage, key, value) {
+function writeStorage(storageName, key, value) {
   try {
-    storage.setItem(key, value);
+    window[storageName].setItem(key, value);
   } catch (_) {
     // The visual preference remains active for this page when storage is unavailable.
   }
@@ -45,27 +45,32 @@ function applyCrt(enabled) {
   document.body.classList.toggle('no-crt', !enabled);
   crtButton.textContent = `CRT effect: ${enabled ? 'On' : 'Off'}`;
 }
-const savedCrt = readStorage(localStorage, 'crt');
+const savedCrt = readStorage('localStorage', 'crt');
 applyCrt(savedCrt ? savedCrt !== 'off' : !prefersReducedMotion);
 crtButton.addEventListener('click', () => {
   const turnOn = document.body.classList.contains('no-crt');
-  writeStorage(localStorage, 'crt', turnOn ? 'on' : 'off');
+  writeStorage('localStorage', 'crt', turnOn ? 'on' : 'off');
   applyCrt(turnOn);
   desktop.closeStartMenu({ restoreFocus: true });
 });
 
 const boot = document.getElementById('boot');
-const dismissBoot = ({ animate = true } = {}) => {
-  writeStorage(sessionStorage, 'booted', '1');
-  if (!animate) {
-    boot.remove();
-    return;
-  }
-  boot.classList.add('hidden');
-  setTimeout(() => boot.remove(), 600);
+const dismissBoot = () => {
+  const restoreFocus = boot.contains(document.activeElement);
+  writeStorage('sessionStorage', 'booted', '1');
+  if (boot.open) boot.close();
+  boot.remove();
+  if (restoreFocus) document.getElementById('win').focus();
 };
-if (prefersReducedMotion || readStorage(sessionStorage, 'booted')) {
-  dismissBoot({ animate: false });
+if (prefersReducedMotion || readStorage('sessionStorage', 'booted')) {
+  dismissBoot();
 } else {
-  setTimeout(dismissBoot, 2400);
+  // Show only after startup succeeds, with a keyboard-accessible escape route.
+  document.getElementById('bootSkip').addEventListener('click', dismissBoot);
+  boot.addEventListener('cancel', (event) => {
+    event.preventDefault();
+    dismissBoot();
+  });
+  setTimeout(dismissBoot, 1200);
+  boot.showModal();
 }

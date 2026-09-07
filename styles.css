@@ -110,7 +110,11 @@
     }
 
     .window {
+      --window-top: 50px;
       width: min(560px, 92vw);
+      max-width: calc(100vw - 16px);
+      max-height: calc(100dvh - 52px - var(--window-top));
+      overflow: hidden;
       background: var(--face);
       border: 2px solid var(--dark);
       box-shadow:
@@ -119,7 +123,7 @@
         inset -1px -1px 0 var(--shadow),
         inset 1px 1px 0 var(--light);
       position: absolute;
-      top: 50px;
+      top: var(--window-top);
       left: 50%;
       transform: translateX(-50%);
       user-select: none;
@@ -127,21 +131,26 @@
     }
 
     .window.maximized {
+      --window-top: 0px !important;
       top: 0 !important;
       left: 0 !important;
       width: 100%;
       height: calc(100% - 44px);
+      max-width: 100%;
+      max-height: calc(100dvh - 44px);
       transform: none !important;
     }
 
-    .window-overwatch { top: 80px; }
-    .window-minesweeper { top: 90px; width: auto; }
-    .window-media { top: 70px; width: min(420px, 92vw); }
-    .window-twitch { top: 60px; width: min(560px, 92vw); }
-    .window-games { top: 75px; width: min(620px, 92vw); }
+    .window:not([hidden]) { display: flex; flex-direction: column; }
+    .window-overwatch { --window-top: 80px; }
+    .window-minesweeper { --window-top: 90px; width: max-content; }
+    .window-media { --window-top: 70px; width: min(420px, 92vw); }
+    .window-twitch { --window-top: 60px; width: min(560px, 92vw); }
+    .window-games { --window-top: 75px; width: min(620px, 92vw); }
 
     .title-bar {
       height: 28px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -227,7 +236,15 @@
     .icons-fade,
     .icons-hint { display: none; }
 
-    .window-body { padding: 14px; display: grid; gap: 14px; }
+    .window-body {
+      padding: 14px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+      min-height: 0;
+      overflow: auto;
+      overscroll-behavior: contain;
+    }
 
     .profile { display: flex; align-items: center; gap: 12px; }
 
@@ -361,6 +378,14 @@
     }
     @keyframes mp-scroll { to { transform: translateX(-100%); } }
 
+    .media-fallback {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--text);
+      text-decoration: none;
+    }
     .mp-embed { width: 100%; height: 352px; border: 0; display: block; border-radius: 4px; }
 
     .tw-embed { width: 100%; aspect-ratio: 16 / 9; border: 0; display: block; background: #000; }
@@ -370,12 +395,19 @@
       position: fixed;
       inset: 0;
       background: #000;
-      display: flex;
+      display: none;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      margin: 0;
+      border: 0;
       align-items: center;
       justify-content: center;
       z-index: 10000;
     }
-    .boot.hidden { opacity: 0; visibility: hidden; transition: opacity .5s ease; }
+    .boot[open] { display: flex; }
+    .boot-skip { margin-top: 20px; min-height: 44px; color: #000; }
     .boot-inner { text-align: center; color: #fff; font-family: Tahoma, system-ui, sans-serif; }
     .boot-logo { font-size: 2rem; font-weight: 700; }
     .boot-sub { color: #5a8fc5; letter-spacing: 5px; margin: 10px 0 26px; font-size: .8rem; }
@@ -384,7 +416,7 @@
       height: 100%;
       width: 0;
       background: repeating-linear-gradient(90deg, #000080 0 10px, #3a6ea5 10px 14px);
-      animation: boot-fill 2.2s ease forwards;
+      animation: boot-fill 1s ease forwards;
     }
     @keyframes boot-fill { to { width: 100%; } }
 
@@ -520,7 +552,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 5;
+      z-index: 1000;
     }
 
     .start-btn {
@@ -598,7 +630,9 @@
         inset -1px -1px 0 var(--shadow),
         inset 1px 1px 0 var(--light);
       display: none;
-      z-index: 6;
+      z-index: 1001;
+      max-height: calc(100dvh - 52px);
+      overflow-y: auto;
     }
 
     .start-menu-inner { display: flex; flex-direction: column; }
@@ -704,6 +738,12 @@
       transform: translateY(1px);
     }
 
+    @media (pointer: coarse), (max-width: 600px) {
+      .title-bar { height: 48px; }
+      .control-btn, .dialog-close { width: 44px; height: 44px; flex-shrink: 0; }
+      .start-item, .btn-98-small { min-height: 44px; }
+    }
+
     @media (max-width: 600px) {
       /* Icons become a horizontal scrolling strip across the top */
       .icons {
@@ -739,7 +779,7 @@
       }
       .icon { width: 76px; margin: 4px 2px; }
       .icon span { font-size: .68rem; }
-      .window { top: 130px; }
+      .window { --window-top: 130px; }
       .ow-rank-icon { width: 32px; height: 32px; }
       .avatar { width: 56px; height: 56px; }
       .title-text { font-size: .95rem; }
@@ -748,15 +788,18 @@
       .game-card img { width: 58px; height: 58px; grid-row: 1 / 3; }
       .game-card strong { margin-top: 0; }
       #twWin {
+        --window-top: 0px !important;
         position: fixed;
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
+        max-width: 100%;
+        max-height: calc(100dvh - 44px);
         height: calc(100% - 44px);
         transform: none !important;
       }
       #twWin .window-body {
-        height: calc(100% - 28px);
+        flex: 1;
         padding: 10px;
         display: flex;
         flex-direction: column;

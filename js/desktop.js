@@ -9,6 +9,28 @@ export function initDesktop() {
   let zCounter = 10;
   let cascade = 0;
 
+  function desktopBottom() {
+    return document.querySelector('.taskbar').getBoundingClientRect().top - 8;
+  }
+
+  function clampWindow(win) {
+    if (win.hidden || win.classList.contains('maximized')) return;
+    // CSS owns the full-screen Twitch layout on narrow screens.
+    if (win.id === 'twWin' && window.innerWidth <= 600) return;
+    const rect = win.getBoundingClientRect();
+    const bottom = desktopBottom();
+    const maxTop = Math.max(0, bottom - Math.min(240, bottom));
+    const top = Math.max(0, Math.min(rect.top, maxTop));
+    win.style.setProperty('--window-top', `${top}px`);
+    if (win.style.left) {
+      win.style.left = `${Math.max(0, Math.min(rect.left, window.innerWidth - rect.width))}px`;
+    }
+  }
+
+  const clampVisibleWindows = () => document.querySelectorAll('.window').forEach(clampWindow);
+  window.addEventListener('resize', clampVisibleWindows);
+  window.visualViewport?.addEventListener('resize', clampVisibleWindows);
+
   function focusFirstControl(win) {
     win.focus();
   }
@@ -47,9 +69,10 @@ export function initDesktop() {
     if (taskButton) taskButton.hidden = false;
     if (window.innerWidth <= 600 && !win.dataset.placed) {
       cascade = (cascade + 1) % 4;
-      win.style.top = `${150 + cascade * 30}px`;
+      win.style.setProperty('--window-top', `${150 + cascade * 30}px`);
       win.dataset.placed = '1';
     }
+    clampWindow(win);
     focusWindow(win);
     closeStartMenu();
     requestAnimationFrame(() => focusFirstControl(win));
@@ -88,7 +111,7 @@ export function initDesktop() {
       const rect = win.getBoundingClientRect();
       win.style.transform = 'none';
       win.style.left = `${rect.left}px`;
-      win.style.top = `${rect.top}px`;
+      win.style.setProperty('--window-top', `${rect.top}px`);
       offsetX = event.clientX - rect.left;
       offsetY = event.clientY - rect.top;
       bar.setPointerCapture(event.pointerId);
@@ -96,11 +119,11 @@ export function initDesktop() {
     bar.addEventListener('pointermove', (event) => {
       if (!dragging) return;
       const maxX = window.innerWidth - win.offsetWidth;
-      const maxY = window.innerHeight - 72;
+      const maxY = desktopBottom() - win.offsetHeight;
       const left = Math.min(Math.max(0, event.clientX - offsetX), Math.max(0, maxX));
       const top = Math.min(Math.max(0, event.clientY - offsetY), Math.max(0, maxY));
       win.style.left = `${left}px`;
-      win.style.top = `${top}px`;
+      win.style.setProperty('--window-top', `${top}px`);
     });
     const stopDragging = () => { dragging = false; };
     bar.addEventListener('pointerup', stopDragging);
@@ -116,6 +139,7 @@ export function initDesktop() {
         const maximized = win.classList.toggle('maximized');
         button.setAttribute('aria-pressed', String(maximized));
         button.setAttribute('aria-label', `${maximized ? 'Restore' : 'Maximize'} My Links`);
+        clampWindow(win);
         focusWindow(win);
       } else if (button.dataset.action === 'minimize') {
         minimizeWindow(win);
@@ -200,5 +224,6 @@ export function initDesktop() {
     if (activeWindow && activeWindow.id !== 'win') closeWindow(activeWindow);
   });
 
+  clampVisibleWindows();
   return { openWindow, closeWindow, closeStartMenu };
 }

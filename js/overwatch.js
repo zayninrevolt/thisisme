@@ -9,6 +9,7 @@ export function initOverwatch({ openWindow }) {
   const name = document.getElementById('owName');
   const avatar = document.getElementById('owAvatar');
   const profileLink = document.getElementById('owProfileLink');
+  const retryButton = document.getElementById('owRetry');
   const playerId = OW_BATTLETAG.trim().replace('#', '-');
   let loaded = false;
   let inFlight = null;
@@ -59,6 +60,7 @@ export function initOverwatch({ openWindow }) {
   async function fetchProfile() {
     showMessage('Loading…');
     status.textContent = 'Fetching…';
+    retryButton.disabled = true;
     try {
       const response = await fetch(
         `https://overfast-api.tekrop.fr/players/${encodeURIComponent(playerId)}/summary`,
@@ -90,10 +92,13 @@ export function initOverwatch({ openWindow }) {
       status.textContent = 'Live';
       loaded = true;
     } catch (_) {
-      showMessage("Couldn't load rank right now. Try again later.");
-      status.textContent = 'Offline';
+      showMessage("Couldn't load rank right now. Retry or view the career profile above.");
+      status.textContent = 'Rank unavailable';
     } finally {
       inFlight = null;
+      retryButton.disabled = false;
+      if (loaded && document.activeElement === retryButton) win.focus();
+      retryButton.hidden = loaded;
     }
   }
 
@@ -115,4 +120,5 @@ export function initOverwatch({ openWindow }) {
 
   document.getElementById('owIconLink').addEventListener('click', openOverwatch);
   document.getElementById('owMenuBtn').addEventListener('click', openOverwatch);
+  retryButton.addEventListener('click', loadProfile);
 }

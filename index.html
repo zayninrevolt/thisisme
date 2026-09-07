@@ -6,6 +6,7 @@
   <title>My Links • ZayninRevolt</title>
   <meta name="description" content="A tiny Windows 98–style link-in-bio page for TikTok, Instagram, YouTube, Spotify, Steam and Overwatch." />
   <link rel="icon" href="img/profile.png" />
+  <link rel="canonical" href="https://justzayn.com/" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="ZayninRevolt — My Links" />
   <meta property="og:description" content="Gamer, creator, and owner of this tiny cursed Windows 98 desktop. Click the icons, follow the links." />
@@ -99,9 +100,9 @@
             <a class="btn-98" href="https://www.tiktok.com/@zayninrevolt" target="_blank" rel="noopener">TikTok</a>
             <a class="btn-98" href="https://www.instagram.com/zayninrevolt" target="_blank" rel="noopener">Instagram</a>
             <a class="btn-98" href="https://www.youtube.com/@zaynonfire" target="_blank" rel="noopener">YouTube</a>
-            <button class="btn-98" id="twitchBtn" type="button">Twitch</button>
-            <button class="btn-98" id="spotifyBtn" type="button">Spotify Playlist</button>
-            <a class="btn-98" href="https://discord.com/users/just.zayn" target="_blank" rel="noopener">Discord</a>
+            <a class="btn-98" id="twitchBtn" href="https://www.twitch.tv/zaynonfire" target="_blank" rel="noopener">Twitch</a>
+            <a class="btn-98" id="spotifyBtn" href="https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA" target="_blank" rel="noopener">Spotify Playlist</a>
+            <a class="btn-98" href="https://discord.com/users/531892280726913034" target="_blank" rel="noopener">Discord</a>
             <a class="btn-98" href="https://dokkadoki.co.uk" target="_blank" rel="noopener">DokkaDoki</a>
           </div>
           <div class="status-bar">
@@ -134,6 +135,7 @@
           <div class="ow-ranks" id="owRanks">
             <p class="ow-message ow-message-wide">Loading…</p>
           </div>
+          <button class="btn-98-small" id="owRetry" type="button" hidden>Retry rank loading</button>
           <div class="status-bar">
             <span id="owSeason"></span>
             <span id="owStatus" role="status">Idle</span>
@@ -176,6 +178,7 @@
       </div>
       <section class="window-body">
         <div class="mp-screen"><span>♪♪♪ NOW PLAYING — ZayninRevolt's Spotify playlist — crank it up ♪♪♪</span></div>
+        <a class="btn-98-small media-fallback" href="https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA" target="_blank" rel="noopener">Open in Spotify</a>
         <iframe class="mp-embed" title="Spotify player" loading="lazy"
           data-src="https://open.spotify.com/embed/playlist/32JiIjyJ5ctyqG7LkSZaFA?utm_source=generator&theme=0"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
@@ -193,6 +196,7 @@
       </div>
       <section class="window-body">
         <div class="mp-screen"><span id="twTicker" role="status">Tuning in to twitch.tv/zaynonfire…</span></div>
+        <a class="btn-98-small media-fallback" href="https://www.twitch.tv/zaynonfire" target="_blank" rel="noopener">Watch on Twitch</a>
         <iframe class="tw-embed" title="Twitch stream" loading="lazy"
           data-src="https://player.twitch.tv/?channel=zaynonfire&parent=justzayn.com&parent=www.justzayn.com&parent=localhost&muted=true"
           allowfullscreen></iframe>
@@ -224,13 +228,14 @@
     <div id="crt" class="crt"></div>
 
     <!-- Boot splash -->
-    <div id="boot" class="boot">
+    <dialog id="boot" class="boot" aria-label="Starting ZaynOS">
       <div class="boot-inner">
         <div class="boot-logo">🪟 Windows 98</div>
         <div class="boot-sub">Z A Y N O S</div>
         <div class="boot-bar"><div class="boot-bar-fill"></div></div>
+        <button class="btn-98-small boot-skip" id="bootSkip" type="button" autofocus>Skip intro</button>
       </div>
-    </div>
+    </dialog>
 
     <!-- Taskbar -->
     <footer class="taskbar" aria-label="Application windows">

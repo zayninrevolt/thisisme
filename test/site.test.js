@@ -42,6 +42,23 @@ test('uses one page landmark and exposes simulated windows as named regions', ()
   assert.doesNotMatch(html, /<section class="[^"]*\bwindow\b[^"]*"[^>]+role="dialog"/);
 });
 
+test('Discord links to the verified account ID rather than a username', () => {
+  assert.match(html, /href="https:\/\/discord\.com\/users\/531892280726913034"/);
+  assert.doesNotMatch(html, /discord\.com\/users\/just\.zayn/);
+});
+
+test('canonical and crawl files consistently identify the production homepage', async () => {
+  const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+  assert.equal(canonical, 'https://justzayn.com/');
+  const robots = await readFile(new URL('../robots.txt', import.meta.url), 'utf8');
+  assert.match(robots, /User-agent: \*/);
+  assert.match(robots, /Allow: \//);
+  assert.match(robots, /Sitemap: https:\/\/justzayn\.com\/sitemap\.xml/);
+  const sitemap = await readFile(new URL('../sitemap.xml', import.meta.url), 'utf8');
+  const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  assert.deepEqual(urls, [canonical]);
+});
+
 test('uses an accessible native About dialog', () => {
   assert.match(html, /<dialog class="dialog-backdrop" id="aboutDialog"/);
   assert.match(html, /id="aboutClose"[^>]*aria-label="Close About ZayninRevolt"/);
