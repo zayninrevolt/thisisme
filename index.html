@@ -106,7 +106,7 @@
             <a class="btn-98" href="https://dokkadoki.co.uk" target="_blank" rel="noopener">DokkaDoki</a>
           </div>
           <div class="status-bar">
-            <span>7 items</span>
+            <a class="plain-link" href="links/">Simple links</a>
             <span id="statusText" role="status">Ready</span>
           </div>
         </div>
@@ -119,6 +119,7 @@
         <span class="title-icon" aria-hidden="true">🎮</span>
         <div class="title-text" id="owWinTitle">Overwatch — Zayn</div>
         <div class="title-controls">
+          <button class="control-btn" type="button" data-action="maximize" data-target="owWin" aria-label="Maximize Overwatch — Zayn" aria-pressed="false">▢</button>
           <button class="control-btn" type="button" data-action="close" data-target="owWin" aria-label="Close Overwatch window">✕</button>
         </div>
       </div>
@@ -150,6 +151,7 @@
         <span class="title-icon" aria-hidden="true">💣</span>
         <div class="title-text" id="msWinTitle">Minesweeper</div>
         <div class="title-controls">
+          <button class="control-btn" type="button" data-action="maximize" data-target="msWin" aria-label="Maximize Minesweeper" aria-pressed="false">▢</button>
           <button class="control-btn" type="button" data-action="close" data-target="msWin" aria-label="Close Minesweeper">✕</button>
         </div>
       </div>
@@ -173,6 +175,7 @@
         <span class="title-icon" aria-hidden="true">🎵</span>
         <div class="title-text" id="mpWinTitle">Media Player — ZaynFM</div>
         <div class="title-controls">
+          <button class="control-btn" type="button" data-action="maximize" data-target="mpWin" aria-label="Maximize Media Player — ZaynFM" aria-pressed="false">▢</button>
           <button class="control-btn" type="button" data-action="close" data-target="mpWin" aria-label="Close Media Player">✕</button>
         </div>
       </div>
@@ -191,6 +194,7 @@
         <span class="title-icon" aria-hidden="true">📺</span>
         <div class="title-text" id="twWinTitle">Twitch — zaynonfire</div>
         <div class="title-controls">
+          <button class="control-btn" type="button" data-action="maximize" data-target="twWin" aria-label="Maximize Twitch — zaynonfire" aria-pressed="false">▢</button>
           <button class="control-btn" type="button" data-action="close" data-target="twWin" aria-label="Close Twitch stream">✕</button>
         </div>
       </div>
@@ -209,6 +213,7 @@
         <span class="title-icon" aria-hidden="true">🎮</span>
         <div class="title-text" id="gamesWinTitle">Games I Play</div>
         <div class="title-controls">
+          <button class="control-btn" type="button" data-action="maximize" data-target="gamesWin" aria-label="Maximize Games I Play" aria-pressed="false">▢</button>
           <button class="control-btn" type="button" data-action="close" data-target="gamesWin" aria-label="Close Games I Play">✕</button>
         </div>
       </div>
@@ -222,6 +227,15 @@
           <a class="btn-98-small" href="https://steamcommunity.com/id/ZaynOnFire" target="_blank" rel="noopener">View my Steam profile ↗</a>
         </div>
       </section>
+    </section>
+
+    <section class="live-notification" id="twNotification" role="region" aria-label="Twitch live notification" hidden>
+      <div class="notification-heading">
+        <strong>Twitch</strong>
+        <button class="dialog-close" id="twNotificationDismiss" type="button" aria-label="Dismiss live notification">✕</button>
+      </div>
+      <p id="twNotificationText" role="status" aria-live="polite" aria-atomic="true"></p>
+      <a class="btn-98-small media-fallback" href="https://www.twitch.tv/zaynonfire" target="_blank" rel="noopener">Watch on Twitch</a>
     </section>
 
     <!-- CRT scanline overlay -->
@@ -248,7 +262,12 @@
         <button class="task" type="button" data-window-target="twWin" aria-controls="twWin" aria-pressed="false" hidden>📺 Twitch</button>
         <button class="task" type="button" data-window-target="gamesWin" aria-controls="gamesWin" aria-pressed="false" hidden>🎮 Games</button>
       </div>
-      <time class="clock" id="clock">--:--</time>
+      <div class="clock-area" id="clockArea">
+        <button class="clock-button" id="clockButton" type="button" aria-describedby="clockDate" aria-label="Show current date">
+          <time class="clock" id="clock">--:--</time>
+        </button>
+        <span class="clock-date" id="clockDate" role="tooltip"></span>
+      </div>
     </footer>
 
     <!-- Start menu -->

@@ -56,7 +56,10 @@ test('canonical and crawl files consistently identify the production homepage', 
   assert.match(robots, /Sitemap: https:\/\/justzayn\.com\/sitemap\.xml/);
   const sitemap = await readFile(new URL('../sitemap.xml', import.meta.url), 'utf8');
   const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-  assert.deepEqual(urls, [canonical]);
+  const linksHtml = await readFile(new URL('../links/index.html', import.meta.url), 'utf8');
+  const linksCanonical = linksHtml.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+  assert.equal(linksCanonical, 'https://justzayn.com/links/');
+  assert.deepEqual(urls, [canonical, linksCanonical]);
 });
 
 test('uses an accessible native About dialog', () => {
@@ -151,6 +154,23 @@ test('application ID lookups all resolve to page elements', async () => {
   const pageIds = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]));
   const requestedIds = [...js.matchAll(/getElementById\('([^']+)'\)/g)].map((match) => match[1]);
   for (const id of requestedIds) assert.ok(pageIds.has(id), `Missing element #${id}`);
+});
+
+test('simple page has safe links, local assets, one landmark and no scripts', async () => {
+  const pageUrl = new URL('../links/index.html', import.meta.url);
+  const page = await readFile(pageUrl, 'utf8');
+  assert.equal((page.match(/<main\b/g) || []).length, 1);
+  assert.equal((page.match(/<h1\b/g) || []).length, 1);
+  assert.doesNotMatch(page, /<script\b|\son[a-z]+="|\sstyle="/i);
+  assert.match(page, /script-src 'none'/);
+  const ids = [...page.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+  assert.equal(new Set(ids).size, ids.length);
+  for (const tag of page.match(/<a\b[^>]*target="_blank"[^>]*>/g) || []) {
+    assert.match(tag, /rel="[^"]*noopener[^"]*"/);
+  }
+  for (const match of page.matchAll(/(?:href|src)="([^"]+)"/g)) {
+    if (!/^(https?:|#)/.test(match[1])) await access(new URL(match[1], pageUrl));
+  }
 });
 
 test('quality workflow runs the repository test command', async () => {

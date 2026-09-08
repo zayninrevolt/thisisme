@@ -142,7 +142,7 @@ test('media fallbacks stay reachable on a short phone viewport', async ({ page }
     await page.locator(icon).click();
     await expectWindowInDesktop(page, win);
     await page.locator(`${win} .media-fallback`).click({ trial: true });
-    await page.locator(`${win} .control-btn`).click();
+    await page.locator(`${win} [data-action="close"]`).click();
   }
 });
 

@@ -15,8 +15,6 @@ export function initDesktop() {
 
   function clampWindow(win) {
     if (win.hidden || win.classList.contains('maximized')) return;
-    // CSS owns the full-screen Twitch layout on narrow screens.
-    if (win.id === 'twWin' && window.innerWidth <= 600) return;
     const rect = win.getBoundingClientRect();
     const bottom = desktopBottom();
     const maxTop = Math.max(0, bottom - Math.min(240, bottom));
@@ -138,7 +136,9 @@ export function initDesktop() {
       if (button.dataset.action === 'maximize') {
         const maximized = win.classList.toggle('maximized');
         button.setAttribute('aria-pressed', String(maximized));
-        button.setAttribute('aria-label', `${maximized ? 'Restore' : 'Maximize'} My Links`);
+        const title = win.querySelector('.title-text').textContent.trim();
+        button.setAttribute('aria-label', `${maximized ? 'Restore' : 'Maximize'} ${title}`);
+        button.textContent = maximized ? '❐' : '▢';
         clampWindow(win);
         focusWindow(win);
       } else if (button.dataset.action === 'minimize') {

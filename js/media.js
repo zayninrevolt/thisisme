@@ -1,4 +1,4 @@
-const TWITCH_CHANNEL = 'zaynonfire';
+import { initTwitchStatus } from './twitch-status.js';
 
 function shouldOpenEmbed(event) {
   if (event.currentTarget.tagName !== 'A') return true;
@@ -36,31 +36,5 @@ export function initMedia({ openWindow }) {
   document.getElementById('gamesIconLink').addEventListener('click', openGames);
   document.getElementById('gamesMenuBtn').addEventListener('click', openGames);
 
-  checkTwitchStatus(ticker);
-}
-
-async function checkTwitchStatus(ticker) {
-  try {
-    const response = await fetch(`https://decapi.me/twitch/uptime/${TWITCH_CHANNEL}`, {
-      signal: AbortSignal.timeout(6000)
-    });
-    const uptime = (await response.text()).trim();
-    if (!response.ok || /offline|error|not found/i.test(uptime)) {
-      ticker.textContent = `${TWITCH_CHANNEL} is offline right now — follow on Twitch so you don't miss the next stream ♪`;
-      return;
-    }
-    document.getElementById('twIconLabel').textContent = 'Twitch 🔴';
-    let game = '';
-    try {
-      const gameResponse = await fetch(`https://decapi.me/twitch/game/${TWITCH_CHANNEL}`, {
-        signal: AbortSignal.timeout(6000)
-      });
-      if (gameResponse.ok) game = (await gameResponse.text()).trim();
-    } catch (_) {
-      game = '';
-    }
-    ticker.textContent = `🔴 LIVE NOW${game ? ` — playing ${game}` : ''} — up for ${uptime} — get in here!`;
-  } catch (_) {
-    ticker.textContent = 'Twitch status unavailable — open the player to check the stream.';
-  }
+  initTwitchStatus(ticker);
 }

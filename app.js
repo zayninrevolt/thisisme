@@ -13,10 +13,18 @@ function updateClock() {
   const now = new Date();
   clock.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   clock.dateTime = now.toISOString();
-  clock.setAttribute('aria-label', `Current time: ${now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`);
+  document.getElementById('clockButton').setAttribute('aria-label', `Current time: ${now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`);
+  document.getElementById('clockDate').textContent = now.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 }
 updateClock();
 setInterval(updateClock, 60_000);
+const clockArea = document.getElementById('clockArea');
+for (const event of ['mouseenter', 'focusin', 'click']) {
+  clockArea.addEventListener(event, () => clockArea.classList.remove('date-dismissed'));
+}
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') clockArea.classList.add('date-dismissed');
+});
 
 const statusText = document.getElementById('statusText');
 document.querySelectorAll('#win .btn-98').forEach((button) => {

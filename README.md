@@ -4,6 +4,28 @@ A static Windows 98-inspired personal links page for `justzayn.com`. It includes
 desktop-style windows for social links, live Twitch and Overwatch status,
 Spotify, favourite games, and Minesweeper.
 
+## Desktop extras
+
+- `/links/` provides the same social destinations plus Steam in a script-free,
+  normally scrolling page. It links back to the desktop and has its own canonical
+  URL in the sitemap. A browser test checks that social destinations stay in sync.
+- Each application has a maximise/restore control. Windows remain above the taskbar;
+  Minesweeper keeps its original board size. Twitch can now restore to a smaller
+  window on phones rather than being permanently fullscreen.
+- Hover or focus the taskbar clock to see the local date. Escape dismisses the date
+  tooltip. It updates with the clock, including across midnight.
+- Twitch status refreshes every two minutes after the previous check completes.
+  Hidden tabs skip network polling. A dismissible in-page notification appears on
+  the first recognised live result, without starting the player or requesting
+  browser notification permission. It is suppressed for the rest of that tab's
+  session until a confirmed offline result re-arms it. If storage is blocked,
+  suppression lasts for the current page only. Missed offline periods between
+  checks cannot be inferred, so a later stream may not alert in a long-lived tab.
+- An unavailable or malformed status is unknown, not offline or live. Requests time
+  out after six seconds, and outages do not re-arm a previously shown notification.
+  The direct Twitch link remains available. Browser tests use controlled response
+  fixtures rather than claiming to verify a real live stream.
+
 ## Run locally
 
 No build step or package installation is required. Start any static file server
@@ -45,6 +67,9 @@ external-service error states, and the browser console.
 - `js/overwatch.js` — Overwatch profile loading and safe rendering
 - `js/minesweeper.js` — game state and pointer, touch, and keyboard controls
 - `js/media.js` — Twitch, Spotify, and games launch behavior
+- `js/twitch-status.js`: bounded polling and session-scoped live notifications
+- `links/index.html`: script-free social links
+- `test/browser/extras.spec.js`: desktop extras, failure cases and local screenshots
 - `img/` — local images and icons
 - `test/site.test.js` — dependency-free quality checks
 - `test/browser/site.spec.js` — browser-level interaction and CSP checks

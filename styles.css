@@ -1,3 +1,15 @@
+    /* A script-free alternative to the desktop, with normal document scrolling. */
+    html.simple-page, .simple-page body { height: auto; min-height: 100%; overflow: auto; }
+    .simple-page body { padding: 24px 12px; }
+    .simple-card { max-width: 480px; margin: 0 auto; background: var(--face); border: 2px solid #000; }
+    .simple-card .title-bar { cursor: default; touch-action: auto; }
+    .simple-content { padding: 18px; }
+    .simple-content .profile { flex-wrap: wrap; }
+    .simple-content .username { margin: 0; overflow-wrap: anywhere; }
+    .simple-content p { line-height: 1.5; }
+    .plain-link { color: #000080; }
+    .plain-link:focus-visible, .simple-page a:focus-visible { outline: 2px dotted #000080; outline-offset: 2px; }
+
     :root {
       --face: #c0c0c0;
       --light: #ffffff;
@@ -390,6 +402,24 @@
 
     .tw-embed { width: 100%; aspect-ratio: 16 / 9; border: 0; display: block; background: #000; }
 
+    .live-notification {
+      position: fixed;
+      right: 10px;
+      bottom: 54px;
+      width: min(320px, calc(100vw - 20px));
+      max-height: calc(100dvh - 64px);
+      overflow: auto;
+      padding: 12px;
+      border: 2px solid #000;
+      background: #ffffe1;
+      box-shadow: 2px 2px #808080;
+      z-index: 1100;
+      overflow-wrap: anywhere;
+    }
+    .notification-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .live-notification p { margin: 10px 0; line-height: 1.4; }
+    .live-notification :focus-visible { outline: 2px dotted #000080; outline-offset: 2px; }
+
     /* Boot splash */
     .boot {
       position: fixed;
@@ -447,6 +477,8 @@
     .ms-body { padding: 8px; }
 
     .ms-panel {
+      width: max-content;
+      justify-self: center;
       border: 3px solid;
       border-color: var(--shadow) var(--light) var(--light) var(--shadow);
       background: var(--face);
@@ -609,6 +641,24 @@
         inset 1px 1px 0 var(--shadow),
         inset -1px -1px 0 var(--light);
     }
+
+    .clock-area { position: relative; }
+    .clock-button { background: transparent; border: 0; padding: 6px 2px; color: #000; font: inherit; }
+    .clock-button:focus-visible { outline: 2px dotted #000080; outline-offset: 1px; }
+    .clock-date {
+      visibility: hidden;
+      position: absolute;
+      bottom: 100%;
+      right: 0;
+      width: max-content;
+      max-width: calc(100vw - 20px);
+      padding: 8px;
+      background: #ffffe1;
+      border: 1px solid #000;
+      box-shadow: 2px 2px #808080;
+      font-size: .85rem;
+    }
+    .clock-area:not(.date-dismissed):is(:hover, :focus-within) .clock-date { visibility: visible; }
 
     .clock {
       font-variant-numeric: tabular-nums;
@@ -787,17 +837,6 @@
       .game-card { display: grid; grid-template-columns: 58px 1fr; column-gap: 10px; text-align: left; align-items: center; }
       .game-card img { width: 58px; height: 58px; grid-row: 1 / 3; }
       .game-card strong { margin-top: 0; }
-      #twWin {
-        --window-top: 0px !important;
-        position: fixed;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        max-width: 100%;
-        max-height: calc(100dvh - 44px);
-        height: calc(100% - 44px);
-        transform: none !important;
-      }
       #twWin .window-body {
         flex: 1;
         padding: 10px;
