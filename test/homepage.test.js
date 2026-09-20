@@ -34,8 +34,10 @@ test('homepage security allows existing analytics but no inline code or embeds',
 test('production styles retain the complete approved stylesheet', async () => {
   const css = await readFile(new URL('home.css', root), 'utf8');
   assert.doesNotMatch(css, /\[truncated\]/);
-  assert.match(css, /\.card-grid\{display:grid/);
-  assert.match(css, /\.hero h1\{font-family:var\(--serif\)/);
+  assert.match(css, /\.open-intro\{padding:/);
+  assert.match(css, /\.open-intro \.profession\{font-family:Georgia/);
+  assert.match(html, /class="open-intro"/);
+  assert.doesNotMatch(html, /class="business-card"|>↗</);
 });
 
 test('homepage social preview is a real local 1200 by 630 PNG with current metadata', async () => {

@@ -14,9 +14,11 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[768,1024],[844,390
     page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     await page.setViewportSize({width,height});
     await page.goto('/');
-    await expect(page.locator('.card-grid')).toHaveCSS('display','grid');
-    await expect(page.locator('.hero h1')).toHaveCSS('font-family', /Georgia/);
-    await expect(page.locator('.button.primary')).toHaveCSS('background-color','rgb(200, 216, 169)');
+    await expect(page.locator('.open-intro .profile-row')).toHaveCSS('display','flex');
+    await expect(page.locator('.profession')).toHaveCSS('font-family', /Georgia/);
+    await expect(page.locator('.contact-button')).toHaveCSS('background-color','rgb(200, 216, 169)');
+    await expect(page.locator('.avatar')).toHaveCSS('border-radius','50%');
+    await expect(page.locator('.open-intro')).toHaveCSS('border-top-width','0px');
     await expect(page.locator('.site-header')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     expect(await page.locator('main *').evaluateAll(elements => elements.filter(el => {
@@ -56,7 +58,7 @@ test('homepage and simple links remain usable without JavaScript', async ({ brow
   const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
   const page=await context.newPage();
   await page.goto('/');
-  await expect(page.locator('.hero').getByRole('link',{name:'LinkedIn',exact:true})).toHaveAttribute('href',linkedin);
+  await expect(page.locator('.contact-button')).toHaveAttribute('href',linkedin);
   await page.locator('details').nth(2).locator('summary').click();
   await expect(page.locator('details').nth(2)).toHaveAttribute('open','');
   await page.getByRole('link',{name:'Simple links',exact:true}).click();
@@ -91,7 +93,7 @@ test('homepage introduces Zayn and offers the exact professional LinkedIn contac
   await page.route('https://gc.zgo.at/**', route => route.fulfill({ contentType: 'application/javascript', body: '' }));
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Zayn.', { timeout: 2000 });
-  await expect(page.locator('.role')).toHaveText(/Gas building surveyor\s*specialising in\s*renewable technology\./);
-  await expect(page.locator('.hero').getByRole('link', { name: 'LinkedIn', exact: true })).toHaveAttribute('href', linkedin);
+  await expect(page.locator('.profession')).toHaveText(/Gas building surveyor\.\s*Specialising in\s*renewable technology\./);
+  await expect(page.locator('.contact-button')).toHaveAttribute('href', linkedin);
   await expect(page.getByRole('link', { name: 'Visit the original homepage' })).toHaveAttribute('href', '/desktop/');
 });
