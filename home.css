@@ -64,6 +64,9 @@ a,button{touch-action:manipulation}
 .about h2,.elsewhere h2{font-family:var(--serif);font-size:37px;line-height:1.17;font-weight:400;letter-spacing:-.04em;margin:0 0 15px}
 .about h2 em{color:var(--accent)}
 .about-copy>p{color:var(--muted);font-size:14px;max-width:390px;margin:0;line-height:1.8}
+.about-copy>p+p{margin-top:16px}
+.professional-link{display:inline-flex;align-items:center;gap:12px;max-width:100%;min-height:44px;margin-top:24px;color:var(--accent);font-size:13px;line-height:1.6;text-underline-offset:4px}
+.professional-link:hover{text-decoration:underline}
 .details-list{border-top:1px solid var(--line)}
 details{border-bottom:1px solid var(--line)}
 summary{list-style:none;cursor:pointer;min-height:57px;display:flex;align-items:center;gap:16px;font-size:14px}
