@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('taskbar date appears on hover and keyboard focus, dismisses with Escape and rolls over', async ({ page }) => {
   await isolate(page);
   await page.clock.install({ time: new Date('2026-09-08T12:00:00Z') });
-  await page.goto('/');
+  await page.goto('/desktop/');
   const date = page.getByRole('tooltip');
   const clock = page.getByRole('button', { name: /Current time:/ });
   await expect(date).toBeHidden();
@@ -38,7 +38,7 @@ test('Twitch notification is dismissible and does not repeat until a confirmed n
     if (isUptime) polls++;
     return route.fulfill({ contentType: 'text/plain', body: isUptime ? uptime : '<img src=x onerror=alert(1)>' });
   });
-  await page.goto('/');
+  await page.goto('/desktop/');
   const notification = page.getByRole('region', { name: 'Twitch live notification', exact: true });
   await expect(notification).toBeVisible();
   await expect(notification).toContainText('zaynonfire is live');
@@ -71,7 +71,7 @@ test('Twitch notification is dismissible and does not repeat until a confirmed n
 test('Twitch restore exits fullscreen on phones and maximised Minesweeper keeps a compact board', async ({ page }) => {
   await isolate(page);
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/desktop/');
   await page.locator('#twIconLink').click();
   const maximise = page.locator('#twWin [data-action="maximize"]');
   await maximise.click();
@@ -101,7 +101,7 @@ for (const failure of ['http', 'empty', 'html', 'network', 'timeout']) {
       if (failure === 'timeout') return;
       return route.fulfill({ status: failure === 'http' ? 503 : 200, contentType: 'text/plain', body: failure === 'html' ? '<html>Upstream error</html>' : '' });
     });
-    await page.goto('/');
+    await page.goto('/desktop/');
     await expect(page.locator('#twTicker')).toContainText('status unavailable', { timeout: 10000 });
     await expect(page.locator('#twNotification')).toBeHidden();
     await expect(page.locator('#twIconLabel')).toHaveText('Twitch');
@@ -121,7 +121,7 @@ test('Twitch outage does not re-arm a dismissed notification and game failure ke
     status: healthy && route.request().url().includes('/uptime/') ? 200 : 503,
     contentType: 'text/plain', body: '2 minutes'
   }));
-  await page.goto('/');
+  await page.goto('/desktop/');
   await expect(page.locator('#twNotificationText')).toHaveText('zaynonfire is live!');
   await page.locator('#twNotificationDismiss').click();
   await expect(page.locator('#twIconLink')).toBeFocused();
@@ -145,7 +145,7 @@ test('blocked storage retains in-memory alert suppression and hidden tabs do not
     if (route.request().url().includes('/uptime/')) polls++;
     return route.fulfill({ contentType: 'text/plain', body: route.request().url().includes('/uptime/') ? '1 minute' : 'Overwatch' });
   });
-  await page.goto('/');
+  await page.goto('/desktop/');
   await expect(page.locator('#twNotification')).toBeVisible();
   await page.locator('#twNotificationDismiss').click();
   await page.clock.runFor(121000);
@@ -167,7 +167,7 @@ test('local previews render without console errors', async ({ page }, testInfo) 
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('/');
+  await page.goto('/desktop/');
   await expect(page.locator('#twNotification')).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('desktop-preview.png'), fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
@@ -200,7 +200,7 @@ for (const viewport of [{ width: 1280, height: 900 }, { width: 320, height: 568 
   test(`all apps maximise and restore at ${viewport.width}px`, async ({ page }) => {
     await isolate(page);
     await page.setViewportSize(viewport);
-    await page.goto('/');
+    await page.goto('/desktop/');
     for (const [icon, win] of apps) {
       await page.locator(icon).scrollIntoViewIfNeeded();
       await page.locator(icon).click();
@@ -244,7 +244,7 @@ test('simple links work without JavaScript and link back to the desktop', async 
   const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 320, height: 568 } });
   const page = await context.newPage();
   await isolate(page);
-  await page.goto('/');
+  await page.goto('/desktop/');
   const expectedLinks = await page.locator('#win .links a').evaluateAll((links) => links.map((a) => ({ text: a.textContent.trim(), href: a.getAttribute('href') })));
   await page.getByRole('link', { name: 'Simple links', exact: true }).click();
   await expect(page).toHaveURL(/\/links\/$/);
@@ -258,6 +258,6 @@ test('simple links work without JavaScript and link back to the desktop', async 
   await expect(page.getByRole('link', { name: 'Steam', exact: true })).toHaveAttribute('href', 'https://steamcommunity.com/id/ZaynOnFire');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.getByRole('link', { name: 'Explore the desktop', exact: true }).click();
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/desktop\/$/);
   await context.close();
 });

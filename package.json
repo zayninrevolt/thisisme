@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "npm run test:static && npm run test:browser",
-    "test:static": "node --test test/site.test.js",
+    "test:static": "node --test test/*.test.js",
     "test:browser": "playwright test"
   },
   "devDependencies": {

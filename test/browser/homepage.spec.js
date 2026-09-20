@@ -1,0 +1,97 @@
+import { expect, test } from '@playwright/test';
+
+const linkedin = 'https://uk.linkedin.com/in/richard-chamberlain-577043230';
+
+test.beforeEach(async ({ page }) => {
+  await page.route('https://gc.zgo.at/**', route => route.fulfill({ contentType: 'application/javascript', body: '' }));
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+});
+
+for (const [width, height] of [[320,568],[390,844],[430,932],[768,1024],[844,390],[1280,1000],[1440,1000]]) {
+  test(`homepage keeps its approved style and has no overflow at ${width}x${height}`, async ({ page }, testInfo) => {
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+    await page.setViewportSize({width,height});
+    await page.goto('/');
+    await expect(page.locator('.card-grid')).toHaveCSS('display','grid');
+    await expect(page.locator('.hero h1')).toHaveCSS('font-family', /Georgia/);
+    await expect(page.locator('.button.primary')).toHaveCSS('background-color','rgb(200, 216, 169)');
+    await expect(page.locator('.site-header')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    expect(await page.locator('main *').evaluateAll(elements => elements.filter(el => {
+      const r = el.getBoundingClientRect();
+      return r.width > 0 && getComputedStyle(el).position !== 'absolute' && (r.right > innerWidth+1 || r.left < -1);
+    }).map(el=>el.getAttribute('class')))).toEqual([]);
+    expect(await page.locator('img').evaluateAll(images=>images.every(i=>i.complete && i.naturalWidth > 0))).toBe(true);
+    await page.locator('.social-grid').getByRole('link',{name:'LinkedIn',exact:true}).click({trial:true});
+    expect(errors).toEqual([]);
+    if (width === 390 || width === 1280) {
+      await page.evaluate(()=>scrollTo(0,0));
+      await page.screenshot({path:testInfo.outputPath(`homepage-${width}.png`),fullPage:true});
+    }
+  });
+}
+
+test('homepage supports keyboard navigation and native expandable specialisms', async ({ page }) => {
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link',{name:'Skip to content'})).toBeFocused();
+  await expect(page.getByRole('link',{name:'Skip to content'})).toHaveCSS('outline-style','solid');
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#main$/);
+  const renewables = page.locator('details').nth(2);
+  await renewables.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(renewables).toHaveAttribute('open','');
+  await page.keyboard.press('Enter');
+  await expect(renewables).not.toHaveAttribute('open');
+  await page.getByRole('link',{name:'Say hello'}).click();
+  await expect(page).toHaveURL(/#connect$/);
+  await expect(page.locator('#connect-title')).toBeInViewport();
+  await expect(page.locator('html')).toHaveCSS('scroll-behavior','auto');
+});
+
+test('homepage and simple links remain usable without JavaScript', async ({ browser }) => {
+  const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});
+  const page=await context.newPage();
+  await page.goto('/');
+  await expect(page.locator('.hero').getByRole('link',{name:'LinkedIn',exact:true})).toHaveAttribute('href',linkedin);
+  await page.locator('details').nth(2).locator('summary').click();
+  await expect(page.locator('details').nth(2)).toHaveAttribute('open','');
+  await page.getByRole('link',{name:'Simple links',exact:true}).click();
+  await expect(page).toHaveURL(/\/links\/$/);
+  await expect(page.getByRole('link',{name:'LinkedIn',exact:true})).toHaveAttribute('href',linkedin);
+  await page.getByRole('link',{name:'Home',exact:true}).click();
+  await expect(page.getByRole('heading',{level:1})).toHaveText('Zayn.');
+  await context.close();
+});
+
+test('homepage keeps the desktop reachable and all existing personal destinations', async ({ page }) => {
+  await page.route('https://decapi.me/**',route=>route.fulfill({contentType:'text/plain',body:'zaynonfire is offline'}));
+  await page.goto('/');
+  const homeLinks=await page.locator('a').evaluateAll(links=>links.map(a=>a.href.replace(/\/$/,'')));
+  await page.getByRole('link',{name:'Visit the original homepage'}).click();
+  await expect(page).toHaveURL(/\/desktop\/$/);
+  await expect(page.locator('#win')).toBeVisible();
+  const originalLinks=await page.locator('#win .links a').evaluateAll(links=>links.map(a=>a.href.replace(/\/$/,'')));
+  for (const link of originalLinks) expect(homeLinks).toContain(link);
+  await expect(page.locator('#boot')).toBeHidden();
+  await expect(page.getByRole('button',{name:'Open Minesweeper',exact:true})).toBeVisible();
+  await expect(page.locator('#msGrid .ms-cell')).toHaveCount(81);
+  await expect(page.locator('#gamesWin .game-card')).toHaveCount(3);
+  await expect(page.locator('#mpWin .media-fallback')).toHaveAttribute('href',/open\.spotify\.com/);
+  await expect(page.locator('#twWin .media-fallback')).toHaveAttribute('href',/twitch\.tv/);
+  await page.getByRole('link',{name:'Home',exact:true}).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole('heading',{level:1})).toHaveText('Zayn.');
+});
+
+test('homepage introduces Zayn and offers the exact professional LinkedIn contact', async ({ page }) => {
+  await page.route('https://gc.zgo.at/**', route => route.fulfill({ contentType: 'application/javascript', body: '' }));
+  await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Zayn.', { timeout: 2000 });
+  await expect(page.locator('.role')).toHaveText(/Gas building surveyor\s*specialising in\s*renewable technology\./);
+  await expect(page.locator('.hero').getByRole('link', { name: 'LinkedIn', exact: true })).toHaveAttribute('href', linkedin);
+  await expect(page.getByRole('link', { name: 'Visit the original homepage' })).toHaveAttribute('href', '/desktop/');
+});

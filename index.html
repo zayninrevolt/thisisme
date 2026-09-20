@@ -1,314 +1,278 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en-GB">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Links • ZayninRevolt</title>
-  <meta name="description" content="A tiny Windows 98–style link-in-bio page for TikTok, Instagram, YouTube, Spotify, Steam and Overwatch." />
-  <link rel="icon" href="img/profile.png" />
-  <link rel="canonical" href="https://justzayn.com/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="ZayninRevolt — My Links" />
-  <meta property="og:description" content="Gamer, creator, and owner of this tiny cursed Windows 98 desktop. Click the icons, follow the links." />
-  <meta property="og:url" content="https://justzayn.com/" />
-  <meta property="og:image" content="https://justzayn.com/img/og.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; img-src 'self' data: https://d15f34w2p8l1cc.cloudfront.net https://static.playoverwatch.com; style-src 'self'; script-src 'self' https://gc.zgo.at; connect-src 'self' https://overfast-api.tekrop.fr https://decapi.me https://justzayn.goatcounter.com; frame-src https://open.spotify.com https://player.twitch.tv; font-src 'self'; upgrade-insecure-requests">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Zayn. Gas building surveyor specialising in renewable technology. Based in Bolton, with a life beyond buildings: DokkaDoki, gaming, streams and music.">
+<title>Zayn | Buildings, renewables & a little more</title>
+<link rel="canonical" href="https://justzayn.com/">
+<link rel="icon" href="/img/profile.png">
+<meta name="theme-color" content="#0c0f0e">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Zayn | Building surveys &amp; renewable technology">
+<meta property="og:description" content="Gas building surveyor specialising in renewable technology. Based in Bolton. Find my professional profile, DokkaDoki, games, streams and music.">
+<meta property="og:url" content="https://justzayn.com/">
+<meta property="og:image" content="https://justzayn.com/img/business-card-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Zayn. Gas building surveyor specialising in renewable technology, based in Bolton.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image:alt" content="Zayn’s dark personal business card">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'none'; img-src 'self' data: https://justzayn.goatcounter.com; style-src 'self'; script-src https://gc.zgo.at; connect-src https://justzayn.goatcounter.com; frame-src 'none'; font-src 'self'; upgrade-insecure-requests">
+<link rel="stylesheet" href="/home.css">
 </head>
 <body>
-  <main class="desktop">
-    <h1 class="visually-hidden">ZayninRevolt — links, streams and games</h1>
-    <!-- Desktop icons -->
-    <div class="icons">
-      <!-- Overwatch: opens an in-page window instead of navigating away -->
-      <button class="icon-link" id="owIconLink" type="button" aria-label="Open Overwatch rank window">
-        <div class="icon">
-          <img src="img/overwatch.svg" alt="Overwatch icon" />
-          <span>Overwatch</span>
-        </div>
-      </button>
-
-      <!-- Twitch: opens an in-page stream window -->
-      <button class="icon-link" id="twIconLink" type="button" aria-label="Open Twitch stream window">
-        <div class="icon">
-          <img src="img/twitch.svg" alt="Twitch icon" />
-          <span id="twIconLabel">Twitch</span>
-        </div>
-      </button>
-
-      <button class="icon-link" id="gamesIconLink" type="button" aria-label="Open Games I Play window">
-        <div class="icon">
-          <img src="img/overwatch.svg" alt="Overwatch icon" />
-          <span>Games I Play</span>
-        </div>
-      </button>
-
-      <a class="icon-link" href="https://dokkadoki.co.uk" target="_blank" rel="noopener">
-        <div class="icon">
-          <img class="icon-contain" src="img/dokkadoki.png" alt="DokkaDoki logo" />
-          <span>DokkaDoki</span>
-        </div>
-      </a>
-
-      <a class="icon-link" href="https://steamcommunity.com/id/ZaynOnFire" target="_blank" rel="noopener">
-        <div class="icon">
-          <img src="img/steam.svg" alt="Steam icon" />
-          <span>Steam</span>
-        </div>
-      </a>
-
-      <!-- Minesweeper: opens a playable in-page game window -->
-      <button class="icon-link" id="msIconLink" type="button" aria-label="Open Minesweeper">
-        <div class="icon">
-          <img src="img/minesweeper.png" alt="Minesweeper icon" />
-          <span>Minesweeper</span>
-        </div>
-      </button>
-
-      <!-- Media Player: opens a Winamp-style window with the Spotify playlist -->
-      <button class="icon-link" id="mpIconLink" type="button" aria-label="Open Media Player">
-        <div class="icon">
-          <img src="img/player.svg" alt="Media Player icon" />
-          <span>Media Player</span>
-        </div>
-      </button>
-    </div>
-    <div class="icons-fade" aria-hidden="true"></div>
-    <div class="icons-hint" aria-hidden="true">Swipe →</div>
-
-    <!-- Main "My Links" window -->
-    <section class="window" id="win" role="region" aria-labelledby="winTitle" tabindex="-1">
-      <div class="title-bar">
-        <span class="title-icon" aria-hidden="true">🗂️</span>
-        <div class="title-text" id="winTitle">My Links</div>
-        <div class="title-controls">
-          <button class="control-btn" type="button" data-action="minimize" data-target="win" aria-label="Minimize My Links">_</button>
-          <button class="control-btn" type="button" data-action="maximize" data-target="win" aria-label="Maximize My Links" aria-pressed="false">▢</button>
-        </div>
-      </div>
-      <section class="window-body">
-        <div class="profile">
-          <div class="avatar"></div>
-          <div class="username">ZayninRevolt</div>
-        </div>
-        <div class="group-box">
-          <span class="group-title">Socials</span>
-          <div class="links">
-            <a class="btn-98" href="https://www.tiktok.com/@zayninrevolt" target="_blank" rel="noopener">TikTok</a>
-            <a class="btn-98" href="https://www.instagram.com/zayninrevolt" target="_blank" rel="noopener">Instagram</a>
-            <a class="btn-98" href="https://www.youtube.com/@zaynonfire" target="_blank" rel="noopener">YouTube</a>
-            <a class="btn-98" id="twitchBtn" href="https://www.twitch.tv/zaynonfire" target="_blank" rel="noopener">Twitch</a>
-            <a class="btn-98" id="spotifyBtn" href="https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA" target="_blank" rel="noopener">Spotify Playlist</a>
-            <a class="btn-98" href="https://discord.com/users/531892280726913034" target="_blank" rel="noopener">Discord</a>
-            <a class="btn-98" href="https://dokkadoki.co.uk" target="_blank" rel="noopener">DokkaDoki</a>
-          </div>
-          <div class="status-bar">
-            <a class="plain-link" href="links/">Simple links</a>
-            <span id="statusText" role="status">Ready</span>
-          </div>
-        </div>
-      </section>
-    </section>
-
-    <!-- Overwatch window (hidden until icon is clicked) -->
-    <section class="window window-overwatch" id="owWin" role="region" aria-labelledby="owWinTitle" tabindex="-1" hidden>
-      <div class="title-bar">
-        <span class="title-icon" aria-hidden="true">🎮</span>
-        <div class="title-text" id="owWinTitle">Overwatch — Zayn</div>
-        <div class="title-controls">
-          <button class="control-btn" type="button" data-action="maximize" data-target="owWin" aria-label="Maximize Overwatch — Zayn" aria-pressed="false">▢</button>
-          <button class="control-btn" type="button" data-action="close" data-target="owWin" aria-label="Close Overwatch window">✕</button>
-        </div>
-      </div>
-      <section class="window-body">
-        <div class="profile">
-          <div class="avatar ow-avatar" id="owAvatar"></div>
-          <div>
-            <div class="username" id="owName">Zayn</div>
-            <a class="ow-profile-link" id="owProfileLink" href="#" target="_blank" rel="noopener">View career profile ↗</a>
-          </div>
-        </div>
-        <div class="group-box">
-          <span class="group-title">Competitive Rank</span>
-          <div class="ow-ranks" id="owRanks">
-            <p class="ow-message ow-message-wide">Loading…</p>
-          </div>
-          <button class="btn-98-small" id="owRetry" type="button" hidden>Retry rank loading</button>
-          <div class="status-bar">
-            <span id="owSeason"></span>
-            <span id="owStatus" role="status">Idle</span>
-          </div>
-        </div>
-      </section>
-    </section>
-
-    <!-- Minesweeper window (hidden until icon is clicked) -->
-    <section class="window window-minesweeper" id="msWin" role="region" aria-labelledby="msWinTitle" tabindex="-1" hidden>
-      <div class="title-bar">
-        <span class="title-icon" aria-hidden="true">💣</span>
-        <div class="title-text" id="msWinTitle">Minesweeper</div>
-        <div class="title-controls">
-          <button class="control-btn" type="button" data-action="maximize" data-target="msWin" aria-label="Maximize Minesweeper" aria-pressed="false">▢</button>
-          <button class="control-btn" type="button" data-action="close" data-target="msWin" aria-label="Close Minesweeper">✕</button>
-        </div>
-      </div>
-      <section class="window-body ms-body">
-        <div class="ms-panel">
-          <div class="ms-head">
-            <div class="ms-led" id="msMines" role="status" aria-label="Mines remaining">010</div>
-            <button class="ms-face" id="msFace" type="button" aria-label="Start a new game">🙂</button>
-            <div class="ms-led" id="msTimer" role="timer" aria-label="Elapsed seconds">000</div>
-          </div>
-          <p class="visually-hidden" id="msInstructions">Use arrow keys to move, Enter or Space to reveal, and F to flag a cell.</p>
-          <div class="ms-grid" id="msGrid" role="grid" aria-label="Minesweeper board" aria-describedby="msInstructions" aria-rowcount="9" aria-colcount="9"></div>
-          <p class="visually-hidden" id="msStatus" role="status" aria-live="polite"></p>
-        </div>
-      </section>
-    </section>
-
-    <!-- Media Player window (Spotify embed, hidden until icon is clicked) -->
-    <section class="window window-media" id="mpWin" role="region" aria-labelledby="mpWinTitle" tabindex="-1" hidden>
-      <div class="title-bar">
-        <span class="title-icon" aria-hidden="true">🎵</span>
-        <div class="title-text" id="mpWinTitle">Media Player — ZaynFM</div>
-        <div class="title-controls">
-          <button class="control-btn" type="button" data-action="maximize" data-target="mpWin" aria-label="Maximize Media Player — ZaynFM" aria-pressed="false">▢</button>
-          <button class="control-btn" type="button" data-action="close" data-target="mpWin" aria-label="Close Media Player">✕</button>
-        </div>
-      </div>
-      <section class="window-body">
-        <div class="mp-screen"><span>♪♪♪ NOW PLAYING — ZayninRevolt's Spotify playlist — crank it up ♪♪♪</span></div>
-        <a class="btn-98-small media-fallback" href="https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA" target="_blank" rel="noopener">Open in Spotify</a>
-        <iframe class="mp-embed" title="Spotify player" loading="lazy"
-          data-src="https://open.spotify.com/embed/playlist/32JiIjyJ5ctyqG7LkSZaFA?utm_source=generator&theme=0"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-      </section>
-    </section>
-
-    <!-- Twitch window (live status + player embed, hidden until icon is clicked) -->
-    <section class="window window-twitch" id="twWin" role="region" aria-labelledby="twWinTitle" tabindex="-1" hidden>
-      <div class="title-bar">
-        <span class="title-icon" aria-hidden="true">📺</span>
-        <div class="title-text" id="twWinTitle">Twitch — zaynonfire</div>
-        <div class="title-controls">
-          <button class="control-btn" type="button" data-action="maximize" data-target="twWin" aria-label="Maximize Twitch — zaynonfire" aria-pressed="false">▢</button>
-          <button class="control-btn" type="button" data-action="close" data-target="twWin" aria-label="Close Twitch stream">✕</button>
-        </div>
-      </div>
-      <section class="window-body">
-        <div class="mp-screen"><span id="twTicker" role="status">Tuning in to twitch.tv/zaynonfire…</span></div>
-        <a class="btn-98-small media-fallback" href="https://www.twitch.tv/zaynonfire" target="_blank" rel="noopener">Watch on Twitch</a>
-        <iframe class="tw-embed" title="Twitch stream" loading="lazy"
-          data-src="https://player.twitch.tv/?channel=zaynonfire&parent=justzayn.com&parent=www.justzayn.com&parent=localhost&muted=true"
-          allowfullscreen></iframe>
-      </section>
-    </section>
-
-    <!-- Games window (personal favourites rather than store shortcuts) -->
-    <section class="window window-games" id="gamesWin" role="region" aria-labelledby="gamesWinTitle" tabindex="-1" hidden>
-      <div class="title-bar">
-        <span class="title-icon" aria-hidden="true">🎮</span>
-        <div class="title-text" id="gamesWinTitle">Games I Play</div>
-        <div class="title-controls">
-          <button class="control-btn" type="button" data-action="maximize" data-target="gamesWin" aria-label="Maximize Games I Play" aria-pressed="false">▢</button>
-          <button class="control-btn" type="button" data-action="close" data-target="gamesWin" aria-label="Close Games I Play">✕</button>
-        </div>
-      </div>
-      <section class="window-body">
-        <div class="games-grid">
-          <div class="game-card"><img src="img/overwatch.svg" alt="Overwatch"><strong>Overwatch</strong><span>Team fights, hero swaps and questionable ult timing.</span></div>
-          <div class="game-card"><img src="img/val.jpg" alt="Valheim"><strong>Valheim</strong><span>Viking survival, building and boss hunting.</span></div>
-          <div class="game-card"><img src="img/phas.jpg" alt="Phasmophobia"><strong>Phasmophobia</strong><span>Ghost hunting, usually with unnecessary screaming.</span></div>
-        </div>
-        <div class="games-actions">
-          <a class="btn-98-small" href="https://steamcommunity.com/id/ZaynOnFire" target="_blank" rel="noopener">View my Steam profile ↗</a>
-        </div>
-      </section>
-    </section>
-
-    <section class="live-notification" id="twNotification" role="region" aria-label="Twitch live notification" hidden>
-      <div class="notification-heading">
-        <strong>Twitch</strong>
-        <button class="dialog-close" id="twNotificationDismiss" type="button" aria-label="Dismiss live notification">✕</button>
-      </div>
-      <p id="twNotificationText" role="status" aria-live="polite" aria-atomic="true"></p>
-      <a class="btn-98-small media-fallback" href="https://www.twitch.tv/zaynonfire" target="_blank" rel="noopener">Watch on Twitch</a>
-    </section>
-
-    <!-- CRT scanline overlay -->
-    <div id="crt" class="crt"></div>
-
-    <!-- Boot splash -->
-    <dialog id="boot" class="boot" aria-label="Starting ZaynOS">
-      <div class="boot-inner">
-        <div class="boot-logo">🪟 Windows 98</div>
-        <div class="boot-sub">Z A Y N O S</div>
-        <div class="boot-bar"><div class="boot-bar-fill"></div></div>
-        <button class="btn-98-small boot-skip" id="bootSkip" type="button" autofocus>Skip intro</button>
-      </div>
-    </dialog>
-
-    <!-- Taskbar -->
-    <footer class="taskbar" aria-label="Application windows">
-      <button class="start-btn" type="button" id="startBtn" aria-haspopup="menu" aria-expanded="false">🪟 Start</button>
-      <div class="tasks" role="group" aria-label="Window switcher">
-        <button class="task active" type="button" data-window-target="win" aria-controls="win" aria-pressed="true">📎 Links</button>
-        <button class="task" type="button" data-window-target="owWin" aria-controls="owWin" aria-pressed="false" hidden>🎮 Overwatch</button>
-        <button class="task" type="button" data-window-target="msWin" aria-controls="msWin" aria-pressed="false" hidden>💣 Minesweeper</button>
-        <button class="task" type="button" data-window-target="mpWin" aria-controls="mpWin" aria-pressed="false" hidden>🎵 Media</button>
-        <button class="task" type="button" data-window-target="twWin" aria-controls="twWin" aria-pressed="false" hidden>📺 Twitch</button>
-        <button class="task" type="button" data-window-target="gamesWin" aria-controls="gamesWin" aria-pressed="false" hidden>🎮 Games</button>
-      </div>
-      <div class="clock-area" id="clockArea">
-        <button class="clock-button" id="clockButton" type="button" aria-describedby="clockDate" aria-label="Show current date">
-          <time class="clock" id="clock">--:--</time>
-        </button>
-        <span class="clock-date" id="clockDate" role="tooltip"></span>
-      </div>
-    </footer>
-
-    <!-- Start menu -->
-    <div class="start-menu" id="startMenu" role="menu" aria-label="Start menu">
-      <div class="start-menu-inner">
-        <div class="start-menu-title">Windows</div>
-        <button class="start-item" id="aboutBtn" role="menuitem">About ZayninRevolt…</button>
-        <button class="start-item" id="owMenuBtn" role="menuitem">Overwatch Rank…</button>
-        <button class="start-item" id="twMenuBtn" role="menuitem">Twitch Stream…</button>
-        <button class="start-item" id="gamesMenuBtn" role="menuitem">Games I Play…</button>
-        <button class="start-item" id="msMenuBtn" role="menuitem">Minesweeper</button>
-        <button class="start-item" id="mpMenuBtn" role="menuitem">Media Player…</button>
-        <button class="start-item" id="crtBtn" role="menuitem">CRT effect: On</button>
-        <button class="start-item" id="steamMenuBtn" role="menuitem">
-          Open Steam Profile
-        </button>
-      </div>
-    </div>
-
-    <!-- About dialog -->
-    <dialog class="dialog-backdrop" id="aboutDialog" aria-labelledby="aboutDialogTitle">
-      <div class="dialog">
-        <div class="dialog-title-bar">
-          <span id="aboutDialogTitle">About ZayninRevolt</span>
-          <button class="dialog-close" id="aboutClose" type="button" aria-label="Close About ZayninRevolt">✕</button>
-        </div>
-        <div class="dialog-body">
-          <p><strong>ZayninRevolt</strong> – gamer, creator, and owner of this tiny cursed Windows 98 desktop.</p>
-          <p>Click the icons, follow the links, and try not to alt+F4 real life.</p>
-        </div>
-        <div class="dialog-buttons">
-          <button class="btn-98-small" id="aboutOk">OK</button>
-        </div>
-      </div>
-    </dialog>
-  </main>
-
-  <script type="module" src="app.js"></script>
-
-  <!-- GoatCounter analytics: JS-based, so bots/scrapers (which don't run JS) aren't counted.
-       Requires the free "justzayn" site code registered at goatcounter.com. -->
-  <script data-goatcounter="https://justzayn.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<a class="skip" href="#main">Skip to content</a>
+<svg width="0" height="0" aria-hidden="true" class="icon-defs">
+<defs>
+<symbol id="game-icon" viewBox="0 0 24 24">
+<path d="M7 7h10c3 0 5 10 3 11-2 1-4-3-5-3H9c-1 0-3 4-5 3C2 17 4 7 7 7Z"/>
+<path d="M8 9v5M5.5 11.5h5M16 10h.1M18 13h.1"/>
+</symbol>
+<symbol id="stream-icon" viewBox="0 0 24 24">
+<path d="M5 3h16v12l-5 5h-4l-3 3v-3H3V7Z"/>
+<path d="M10 7v6m6-6v6"/>
+</symbol>
+<symbol id="photo-icon" viewBox="0 0 24 24">
+<rect x="3" y="3" width="18" height="18" rx="5"/>
+<circle cx="12" cy="12" r="4"/>
+<path d="M17 7h.1"/>
+</symbol>
+<symbol id="coffee-icon" viewBox="0 0 24 24">
+<path d="M4 8h12v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4ZM16 9h2a3 3 0 0 1 0 6h-2M7 3v2m5-2v2"/>
+</symbol>
+<symbol id="music-icon" viewBox="0 0 24 24">
+<path d="M9 18V5l11-2v13M9 9l11-2"/>
+<ellipse cx="6" cy="18" rx="3" ry="3"/>
+<ellipse cx="17" cy="16" rx="3" ry="3"/>
+</symbol>
+</defs>
+</svg>
+<div class="wrap">
+<header class="site-header">
+<a class="brand" href="#main" aria-label="Zayn home">
+<span class="brand-symbol" aria-hidden="true">z</span>justzayn.com</a>
+<nav class="header-nav" aria-label="Main navigation">
+<a class="desktop-nav" href="#about">About</a>
+<a href="#personal">Beyond work</a>
+<a class="say-hi" href="#connect">Say hello <span class="arrow" aria-hidden="true">↗</span>
+</a>
+</nav>
+</header>
+<main id="main">
+<section class="business-card" aria-labelledby="name">
+<div class="card-top">
+<span class="micro">
+<i class="location-mark" aria-hidden="true">
+</i>Bolton, United Kingdom</span>
+<span class="micro">A little introduction</span>
+</div>
+<div class="card-grid">
+<div class="hero">
+<p class="hello">Hi, I’m</p>
+<h1 id="name">Zayn<span>.</span>
+</h1>
+<h2 class="role">Gas building surveyor<br>specialising in<br>
+<em>renewable technology.</em>
+</h2>
+<p class="intro">Buildings, heating and the way we use energy.<br>I’m interested in how they work together, and what makes a home work better.</p>
+<div class="actions">
+<a class="button primary" href="https://uk.linkedin.com/in/richard-chamberlain-577043230">LinkedIn <span aria-hidden="true">↗</span>
+</a>
+<a class="button" href="#about">A bit about me <span aria-hidden="true">↓</span>
+</a>
+</div>
+</div>
+<aside class="identity" aria-label="My online identity">
+<div class="portrait-frame">
+<img src="/img/profile.png" width="170" height="256" alt="Zayn’s illustrated avatar, from his existing homepage">
+<span class="portrait-label">the person behind the page</span>
+</div>
+<div class="identity-copy">
+<span class="micro">Elsewhere on the internet</span>
+<p class="handle">ZayninRevolt</p>
+<p>Gamer. Creator. Still curious.</p>
+<div class="identity-links">
+<a class="mini-link" href="https://www.twitch.tv/zaynonfire" aria-label="Zayn on Twitch">
+<svg class="icon" aria-hidden="true">
+<use href="#stream-icon"/>
+</svg>
+</a>
+<a class="mini-link" href="https://www.instagram.com/zayninrevolt" aria-label="Zayn on Instagram">
+<svg class="icon" aria-hidden="true">
+<use href="#photo-icon"/>
+</svg>
+</a>
+<a class="mini-link" href="https://steamcommunity.com/id/ZaynOnFire" aria-label="Zayn on Steam">
+<svg class="icon" aria-hidden="true">
+<use href="#game-icon"/>
+</svg>
+</a>
+</div>
+</div>
+</aside>
+</div>
+<div class="card-footer">
+<div class="expertise">
+<span>Building surveys</span>
+<span>Heating</span>
+<span>Renewables</span>
+</div>
+<a href="#personal">And outside of work <span aria-hidden="true">↓</span>
+</a>
+</div>
+</section>
+<section class="about" id="about" aria-labelledby="about-title">
+<div class="section-label">
+<span>01</span> The professional side</div>
+<div class="about-layout">
+<div class="about-copy">
+<h2 id="about-title">A building is more<br>than its <em>heating system.</em>
+</h2>
+<p>My work centres on domestic surveying and renewable technology. I’m interested in the whole picture: the building itself, how it’s heated, and the people who live in it.</p>
+</div>
+<div class="details-list">
+<details open>
+<summary>
+<span class="number">01</span>Buildings &amp; surveying</summary>
+<p>Understanding the existing home, its construction and the practical constraints that shape any improvement.</p>
+</details>
+<details>
+<summary>
+<span class="number">02</span>Heating &amp; comfort</summary>
+<p>Looking at heating in the context of the building, with comfort and everyday use in mind.</p>
+</details>
+<details>
+<summary>
+<span class="number">03</span>Renewable technology</summary>
+<p>My specialism, and a continuing interest: how renewable technology fits into existing homes, rather than treating it as a standalone solution.</p>
+</details>
+</div>
+</div>
+</section>
+<section class="personal" id="personal" aria-labelledby="personal-title">
+<h2 class="section-label" id="personal-title">
+<span>02</span> Not all buildings &amp; boilers</h2>
+<div class="personal-grid">
+<article class="tile cafe">
+<div class="tile-kicker">Manga &amp; community <svg class="icon" aria-hidden="true">
+<use href="#coffee-icon"/>
+</svg>
+</div>
+<h3>DokkaDoki</h3>
+<p>A little Japanese escape in Bury. Manga, coffee and a place to get lost in a good story.</p>
+<a class="tile-link" href="https://dokkadoki.co.uk/">Explore DokkaDoki <span class="arrow" aria-hidden="true">↗</span>
+</a>
+</article>
+<article class="tile games">
+<div class="tile-kicker">Games &amp; streams <svg class="icon controller" aria-hidden="true">
+<use href="#game-icon"/>
+</svg>
+</div>
+<h3>Off the clock.</h3>
+<p>Team fights, Viking builds and the occasional questionable decision.</p>
+<ul class="game-names" aria-label="Games I play">
+<li>Overwatch</li>
+<li>Valheim</li>
+<li>Phasmophobia</li>
+</ul>
+<a class="tile-link" href="https://www.twitch.tv/zaynonfire">Find me on Twitch <span class="arrow" aria-hidden="true">↗</span>
+</a>
+</article>
+<article class="tile music-tile">
+<div class="tile-kicker">The soundtrack <svg class="icon music" aria-hidden="true">
+<use href="#music-icon"/>
+</svg>
+</div>
+<h3>Something on repeat.</h3>
+<p>My Spotify playlist. For the background, or turned all the way up.</p>
+<div class="soundwave" aria-hidden="true">
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+<i>
+</i>
+</div>
+<a class="tile-link" href="https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA">Open the playlist <span class="arrow" aria-hidden="true">↗</span>
+</a>
+</article>
+</div>
+</section>
+<section class="elsewhere" id="connect" aria-labelledby="connect-title">
+<div class="section-label">
+<span>03</span> Find me elsewhere</div>
+<div class="contact-row">
+<h2 id="connect-title">Same person. Different tabs.</h2>
+<p>A question about renewables, a shared interest, or just a hello. Here’s where to find me.</p>
+</div>
+<nav class="social-grid" aria-label="Social profiles">
+<a class="social-link" href="https://uk.linkedin.com/in/richard-chamberlain-577043230">LinkedIn <span class="arrow" aria-hidden="true">↗</span>
+</a>
+<a class="social-link" href="https://discord.com/users/531892280726913034">Discord <span class="arrow" aria-hidden="true">↗</span>
+</a>
+<a class="social-link" href="https://www.instagram.com/zayninrevolt">Instagram <span class="arrow" aria-hidden="true">↗</span>
+</a>
+<a class="social-link" href="https://www.tiktok.com/@zayninrevolt">TikTok <span class="arrow" aria-hidden="true">↗</span>
+</a>
+<a class="social-link" href="https://www.youtube.com/@zaynonfire">YouTube <span class="arrow" aria-hidden="true">↗</span>
+</a>
+<a class="social-link" href="https://www.twitch.tv/zaynonfire">Twitch <span class="arrow" aria-hidden="true">↗</span>
+</a>
+<a class="social-link" href="https://steamcommunity.com/id/ZaynOnFire">Steam <span class="arrow" aria-hidden="true">↗</span>
+</a>
+<a class="social-link" href="https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA">Spotify <span class="arrow" aria-hidden="true">↗</span>
+</a>
+<a class="social-link" href="https://overwatch.blizzard.com/en-us/career/Zayn-21529/">Overwatch profile <span class="arrow" aria-hidden="true">↗</span>
+</a>
+</nav>
+<div class="retro-note">
+<span>Prefer the tiny, slightly cursed Windows 98 desktop?</span>
+<a href="/desktop/">Visit the original homepage <span aria-hidden="true">↗</span>
+</a>
+</div>
+</section>
+</main>
+<footer class="footer">
+<span>Zayn / Bolton, UK</span>
+<a href="/links/">Simple links</a>
+<a href="#main">Back to the introduction ↑</a>
+</footer>
+</div>
+<script data-goatcounter="https://justzayn.goatcounter.com/count" async src="https://gc.zgo.at/count.js">
+</script>
 </body>
 </html>

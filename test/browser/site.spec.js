@@ -31,7 +31,7 @@ async function stubExternalServices(page) {
 test.beforeEach(async ({ page }) => {
   await stubExternalServices(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
+  await page.goto('/desktop/');
 });
 
 test('reduced motion skips boot and the page has no console or CSP errors', async ({ page }) => {

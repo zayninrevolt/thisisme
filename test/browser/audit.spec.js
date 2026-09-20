@@ -12,7 +12,7 @@ async function isolateExternalServices(page) {
 test.beforeEach(async ({ page }) => {
   await isolateExternalServices(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
+  await page.goto('/desktop/');
 });
 
 async function expectWindowInDesktop(page, selector) {
@@ -50,7 +50,7 @@ for (const failure of ['disabled JavaScript', 'failed module']) {
     const page = await context.newPage();
     await isolateExternalServices(page);
     if (failure === 'failed module') await page.route('**/js/desktop.js', (route) => route.abort());
-    await page.goto('/');
+    await page.goto('/desktop/');
     await expect(page.locator('#boot')).toBeHidden();
     const link = page.getByRole('link', { name: 'Discord', exact: true });
     await link.scrollIntoViewIfNeeded();
@@ -104,7 +104,7 @@ test('media links have direct fallbacks when embeds or JavaScript fail', async (
   const context = await browser.newContext({ javaScriptEnabled: false });
   const fallbackPage = await context.newPage();
   await isolateExternalServices(fallbackPage);
-  await fallbackPage.goto('/');
+  await fallbackPage.goto('/desktop/');
   await expect(fallbackPage.locator('#spotifyBtn')).toHaveAttribute('href', 'https://open.spotify.com/playlist/32JiIjyJ5ctyqG7LkSZaFA');
   await expect(fallbackPage.locator('#twitchBtn')).toHaveAttribute('href', 'https://www.twitch.tv/zaynonfire');
   await fallbackPage.locator('#spotifyBtn').click({ trial: true });
@@ -183,7 +183,7 @@ test('touch window controls are at least 44px and remain operable', async ({ bro
   const context = await browser.newContext({ viewport: { width: 375, height: 667 }, hasTouch: true, reducedMotion: 'reduce' });
   const page = await context.newPage();
   await isolateExternalServices(page);
-  await page.goto('/');
+  await page.goto('/desktop/');
   const controls = page.locator('#win .control-btn');
   for (const control of await controls.all()) {
     const rect = await control.boundingBox();

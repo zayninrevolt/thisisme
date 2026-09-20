@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { access } from 'node:fs/promises';
 
-const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+const html = await readFile(new URL('../desktop/index.html', import.meta.url), 'utf8');
 
 async function readLocalModuleSources(entry) {
   const seen = new Set();
@@ -49,7 +49,10 @@ test('Discord links to the verified account ID rather than a username', () => {
 
 test('canonical and crawl files consistently identify the production homepage', async () => {
   const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
-  assert.equal(canonical, 'https://justzayn.com/');
+  assert.equal(canonical, 'https://justzayn.com/desktop/');
+  const home = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const homeCanonical = home.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+  assert.equal(homeCanonical, 'https://justzayn.com/');
   const robots = await readFile(new URL('../robots.txt', import.meta.url), 'utf8');
   assert.match(robots, /User-agent: \*/);
   assert.match(robots, /Allow: \//);
@@ -59,7 +62,7 @@ test('canonical and crawl files consistently identify the production homepage', 
   const linksHtml = await readFile(new URL('../links/index.html', import.meta.url), 'utf8');
   const linksCanonical = linksHtml.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
   assert.equal(linksCanonical, 'https://justzayn.com/links/');
-  assert.deepEqual(urls, [canonical, linksCanonical]);
+  assert.deepEqual(urls, [homeCanonical, canonical, linksCanonical]);
 });
 
 test('uses an accessible native About dialog', () => {

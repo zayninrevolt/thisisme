@@ -1,8 +1,29 @@
-# ZayninRevolt — My Links
+# Zayn | justzayn.com
 
-A static Windows 98-inspired personal links page for `justzayn.com`. It includes
-desktop-style windows for social links, live Twitch and Overwatch status,
-Spotify, favourite games, and Minesweeper.
+A dark personal business-card homepage for Zayn, a gas building surveyor
+specialising in renewable technology, with his professional LinkedIn profile,
+DokkaDoki, gaming, music and social links.
+
+## Routes
+
+- `/`: the approved business-card homepage. Native links and expandable specialisms
+  work without JavaScript. `home.css` is isolated from the desktop styling.
+- `/desktop/`: the preserved Windows 98 experience, including live Twitch and
+  Overwatch status, Spotify, favourite games and Minesweeper. Its document base
+  remains `/` so existing styles, images, modules and integration code stay intact.
+- `/links/`: the script-free simple-links page, with navigation to both other routes.
+
+The LinkedIn destination is used exactly as supplied by the site owner:
+`https://uk.linkedin.com/in/richard-chamberlain-577043230`.
+No professional email, credentials, testimonials or case studies are invented.
+
+The homepage retains the previously enabled GoatCounter analytics. It does not
+load gaming APIs or media embeds. Its dedicated CSP does not allow inline styles
+or scripts. The old desktop keeps its existing integration policy.
+
+`img/business-card-og.png` is a 1200x630 PNG rendered from the homepage business
+card for social sharing. The original `img/og.png` remains for the desktop and
+simple-links pages. All routes have their own canonical URL in `sitemap.xml`.
 
 ## Desktop extras
 
@@ -60,7 +81,11 @@ external-service error states, and the browser console.
 
 ## Structure
 
-- `index.html` — page content and security metadata
+- `index.html`: business-card homepage and security/share metadata
+- `home.css`: homepage styling
+- `desktop/index.html`: preserved Windows 98 page
+- `test/homepage.test.js`: homepage structure, CSP, asset and social-preview checks
+- `test/browser/homepage.spec.js`: responsive, keyboard, no-JS and route regression checks
 - `styles.css` — Windows 98 visual design and responsive styles
 - `app.js` — lightweight application bootstrap, clock, CRT, and boot behavior
 - `js/desktop.js` — windows, taskbar, Start menu, dragging, and focus management
@@ -84,7 +109,7 @@ The page connects to:
 - Twitch and Spotify for embedded players
 - GoatCounter for privacy-friendly traffic analytics
 
-The Content Security Policy in `index.html` allow-lists these services. Update
+The Content Security Policy in `desktop/index.html` allow-lists these services. Update
 the policy deliberately if an integration host changes.
 
 ## Keyboard controls
