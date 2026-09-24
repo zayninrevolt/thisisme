@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A transparent first-pass calculator for pressure loss through natural-gas, domestic-water and heating-water pipe routes.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'none'; style-src 'self'; script-src 'self'">
+  <title>Pipe sizing & pressure loss | Zayn</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">ZAYN <span>/</span> WORKING TOOLS</a>
+    <p>PIPE ROUTE CHECK</p>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">DOMESTIC SERVICES</p>
+      <h1 id="page-title">Pipe sizing &amp; pressure loss.</h1>
+      <p class="lede">Check a single route of up to four pipe sections. Select the service first, then give each section its own downstream load or flow, pipe size and effective length.</p>
+    </section>
+
+    <section class="calculator-card purpose-card" aria-labelledby="purpose-title">
+      <div class="section-heading">
+        <p class="number">01</p>
+        <div>
+          <p class="eyebrow">CHOOSE THE METHOD</p>
+          <h2 id="purpose-title">What is this route carrying?</h2>
+        </div>
+      </div>
+      <label class="purpose-select">Calculation purpose
+        <select id="calculation-purpose" aria-label="Calculation purpose">
+          <option value="gas">Natural gas</option>
+          <option value="water">Domestic hot / cold water</option>
+          <option value="heating">Heating circuit water</option>
+        </select>
+      </label>
+      <div id="service-fields" class="service-fields"></div>
+    </section>
+
+    <section class="calculator-card route-card" aria-labelledby="route-title">
+      <div class="route-heading">
+        <div class="section-heading">
+          <p class="number">02</p>
+          <div>
+            <p class="eyebrow">ROUTE SECTIONS</p>
+            <h2 id="route-title">Build the path in order.</h2>
+          </div>
+        </div>
+        <div class="route-actions">
+          <p data-testid="section-count" id="section-count" class="section-count">1 section</p>
+          <button id="add-section" type="button">Add section</button>
+        </div>
+      </div>
+      <p class="helper">For a branched installation, enter the downstream demand or flow carried by each section on the route being checked. Heating sections can use known fitting lengths or a +50% unknown-fittings allowance. For a gravity tank to one tap, every route section carries the calculated tap flow.</p>
+      <div id="sections" class="sections" aria-live="polite"></div>
+    </section>
+
+    <section class="summary-card" aria-labelledby="summary-title">
+      <div>
+        <p class="eyebrow">ROUTE RESULT</p>
+        <h2 id="summary-title">Pressure loss across the selected path.</h2>
+      </div>
+      <output id="route-result" data-testid="route-result" class="route-result" aria-live="polite"></output>
+      <div id="section-results" class="section-results"></div>
+    </section>
+
+    <aside class="method-note" aria-labelledby="method-title">
+      <p class="eyebrow">METHOD AND LIMITS</p>
+      <h2 id="method-title">A transparent first-pass check.</h2>
+      <div id="method-copy"></div>
+    </aside>
+
+    <p id="calculator-error" class="error-message" role="alert" hidden></p>
+  </main>
+
+  <footer>Use this as a design aid, then verify the final pipe selection, fittings, appliance data and applicable standard against the real installation.</footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

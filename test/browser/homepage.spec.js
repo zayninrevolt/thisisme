@@ -118,7 +118,13 @@ test('homepage puts working tools and a fuller DokkaDoki story within easy reach
   await page.goBack();
   await expect(page).toHaveURL(/#tools$/);
   await expect(page.locator('.tool-card')).toHaveCount(3);
-  await expect(page.locator('.tool-card').filter({ hasText: 'Pipe sizing' })).toContainText('In development');
+  await expect(page.getByRole('link', { name: 'Open pipe calculator' })).toHaveAttribute('href', '/pipe/');
+  await page.getByRole('link', { name: 'Open pipe calculator' }).click();
+  await expect(page).toHaveURL(/\/pipe\/$/);
+  await expect(page.getByRole('heading', { name: 'Pipe sizing & pressure loss' })).toBeVisible();
+  await expect(page.getByTestId('route-result')).toContainText('mbar');
+  await page.goBack();
+  await expect(page).toHaveURL(/#tools$/);
   await page.getByRole('link', { name: 'DokkaDoki', exact: true }).click();
   await expect(page).toHaveURL(/#dokkadoki$/);
   await expect(page.locator('#dokkadoki-title')).toContainText(/DokkaDoki is\s*more than coffee\./);
