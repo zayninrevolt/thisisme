@@ -30,26 +30,20 @@
       </div>
       <div class="calculator-layout">
         <div class="fields-grid">
-          <label>Hot-water demand at tap temperature (litres)
-            <input id="delivered-litres" type="number" min="1" step="1" value="150" inputmode="decimal">
+          <label>Household occupants (people)
+            <input id="occupants" type="number" min="0" step="1" value="3" inputmode="numeric">
           </label>
-          <label>Cold feed temperature (°C)
-            <input id="sizing-cold-temperature" type="number" min="0" max="30" step="0.5" value="10" inputmode="decimal">
-          </label>
-          <label>Tap delivery temperature (°C)
-            <input id="delivery-temperature" type="number" min="1" max="70" step="0.5" value="40" inputmode="decimal">
-          </label>
-          <label>Cylinder storage temperature (°C)
-            <input id="sizing-storage-temperature" type="number" min="1" max="85" step="0.5" value="55" inputmode="decimal">
+          <label>Bedrooms
+            <input id="bedrooms" type="number" min="0" step="1" value="2" inputmode="numeric">
           </label>
         </div>
         <output class="result-panel" id="sizing-output" aria-live="polite">
           <span class="result-label">Suggested minimum storage</span>
-          <strong data-testid="cylinder-result">100 L</strong>
-          <span data-testid="cylinder-energy" class="result-detail">5.23 kWh stored from cold</span>
+          <strong data-testid="cylinder-result">135 L</strong>
+          <span data-testid="cylinder-rule-breakdown" class="result-detail">Occupant rule: 135 L · Bedroom rule: 135 L. Both rules are equal.</span>
         </output>
       </div>
-      <p class="helper">This mixes stored cylinder water with cold feed to provide the chosen tap-temperature volume. It is a starting capacity only: allow for demand profile, usable cylinder volume and system design.</p>
+      <p class="helper">A quick domestic sizing guide: take the greater of 45 L per occupant or 45 L for every bedroom plus one. It is a practical starting point, not a substitute for checking the household’s actual demand profile, cylinder usable volume and system design.</p>
     </section>
 
     <section class="shared-panel" aria-labelledby="shared-title">

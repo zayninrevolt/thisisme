@@ -108,6 +108,12 @@ test('homepage puts working tools and a fuller DokkaDoki story within easy reach
   await page.getByRole('link', { name: 'Open cylinder calculator' }).click();
   await expect(page).toHaveURL(/\/cylinder\/$/);
   await expect(page.getByRole('heading', { name: 'Cylinder sizing' })).toBeVisible();
+  await expect(page.getByTestId('cylinder-result')).toHaveText('135 L');
+  await expect(page.getByTestId('cylinder-rule-breakdown')).toContainText('Both rules are equal.');
+  await page.getByLabel('Household occupants (people)').fill('2');
+  await page.getByLabel('Bedrooms').fill('3');
+  await expect(page.getByTestId('cylinder-result')).toHaveText('180 L');
+  await expect(page.getByTestId('cylinder-rule-breakdown')).toContainText('The bedroom rule governs.');
   await expect(page.getByTestId('recharge-result')).toHaveText('3 hr 29 min');
   await page.goBack();
   await expect(page).toHaveURL(/#tools$/);

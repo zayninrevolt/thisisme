@@ -1,5 +1,5 @@
 import {
-  calculateRequiredCylinderLitres,
+  calculateRecommendedCylinderLitres,
   calculateStoredEnergyKwh,
   calculateRechargeTimeHours,
   calculateRequiredKilowatts,
@@ -7,7 +7,7 @@ import {
 
 const $ = (id) => document.getElementById(id);
 const fields = [
-  'delivered-litres', 'sizing-cold-temperature', 'delivery-temperature', 'sizing-storage-temperature',
+  'occupants', 'bedrooms',
   'cylinder-volume', 'start-temperature', 'target-temperature', 'heat-output', 'recharge-hours',
 ].map($);
 
@@ -40,20 +40,21 @@ function showError(message = '') {
 
 function update() {
   try {
-    const sizing = {
-      deliveredLitres: numberValue('delivered-litres'),
-      coldTemperature: numberValue('sizing-cold-temperature'),
-      deliveryTemperature: numberValue('delivery-temperature'),
-      storageTemperature: numberValue('sizing-storage-temperature'),
-    };
-    const suggestedLitres = calculateRequiredCylinderLitres(sizing);
-    const suggestedEnergy = calculateStoredEnergyKwh({
-      cylinderLitres: suggestedLitres,
-      startTemperature: sizing.coldTemperature,
-      targetTemperature: sizing.storageTemperature,
-    });
+    const occupants = numberValue('occupants');
+    const bedrooms = numberValue('bedrooms');
+    const suggestedLitres = calculateRecommendedCylinderLitres({ occupants, bedrooms });
+    const occupantRuleLitres = occupants * 45;
+    const bedroomRuleLitres = (bedrooms + 1) * 45;
+    const governingRule = occupantRuleLitres === bedroomRuleLitres
+      ? 'Both rules are equal.'
+      : occupantRuleLitres > bedroomRuleLitres
+        ? 'The occupant rule governs.'
+        : 'The bedroom rule governs.';
     setResult('cylinder-result', `${formatNumber(suggestedLitres, 0)} L`);
-    setResult('cylinder-energy', `${formatNumber(suggestedEnergy)} kWh stored from cold`);
+    setResult(
+      'cylinder-rule-breakdown',
+      `Occupant rule: ${formatNumber(occupantRuleLitres, 0)} L · Bedroom rule: ${formatNumber(bedroomRuleLitres, 0)} L. ${governingRule}`,
+    );
 
     const shared = {
       cylinderLitres: numberValue('cylinder-volume'),

@@ -24,19 +24,23 @@ export function calculateStoredEnergyKwh({ cylinderLitres, startTemperature, tar
   return litres * WATER_SPECIFIC_HEAT_KJ_PER_KG_K * deltaT / KJ_PER_KWH;
 }
 
-export function calculateRequiredCylinderLitres({
-  deliveredLitres,
-  coldTemperature,
-  deliveryTemperature,
-  storageTemperature,
-}) {
-  const demand = positiveNumber(deliveredLitres, 'Delivered litres');
-  const storageRise = temperatureRise(coldTemperature, storageTemperature);
-  const deliveryRise = temperatureRise(coldTemperature, deliveryTemperature);
-  if (deliveryTemperature > storageTemperature) {
-    throw new RangeError('Storage temperature must be at least the delivery temperature.');
+function nonNegativeWholeNumber(value, label) {
+  const number = Number(value);
+  if (!Number.isFinite(number) || number < 0) {
+    throw new RangeError(`${label} must be zero or greater.`);
   }
-  return demand * deliveryRise / storageRise;
+  if (!Number.isInteger(number)) {
+    throw new RangeError(`${label} must be a whole number.`);
+  }
+  return number;
+}
+
+export function calculateRecommendedCylinderLitres({ occupants, bedrooms }) {
+  const householdOccupants = nonNegativeWholeNumber(occupants, 'Occupants');
+  const householdBedrooms = nonNegativeWholeNumber(bedrooms, 'Bedrooms');
+  const occupantRuleLitres = householdOccupants * 45;
+  const bedroomRuleLitres = (householdBedrooms + 1) * 45;
+  return Math.max(occupantRuleLitres, bedroomRuleLitres);
 }
 
 export function calculateRechargeTimeHours({
