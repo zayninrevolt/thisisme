@@ -110,5 +110,8 @@ test('homepage puts working tools and a fuller DokkaDoki story within easy reach
   await expect(page).toHaveURL(/#dokkadoki$/);
   await expect(page.locator('#dokkadoki-title')).toContainText(/DokkaDoki is\s*more than coffee\./);
   await expect(page.locator('.dokkadoki-values details')).toHaveCount(3);
+  const mangaLabel = page.locator('.dokkadoki-values summary strong').first();
+  await expect(mangaLabel).toHaveText('Manga to discover');
+  expect((await mangaLabel.boundingBox()).width).toBeGreaterThan(200);
   await expect(page.getByRole('link', { name: 'Visit DokkaDoki' })).toHaveAttribute('href', 'https://dokkadoki.co.uk/');
 });

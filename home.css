@@ -289,9 +289,10 @@ body{background:#101312}.open-intro{padding:30px 0 32px;border-bottom:1px solid 
 .dokkadoki-button:hover{background:#f1d3b6}
 .dokkadoki-values{border-top:1px solid #ffffff1c}
 .dokkadoki-values details{border-bottom:1px solid #ffffff1c}
-.dokkadoki-values summary{min-height:61px;display:grid;grid-template-columns:28px 1fr;gap:12px;font-size:14px;color:#f1dfcb}
+.dokkadoki-values summary{min-height:61px;display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;font-size:14px;color:#f1dfcb}
 .dokkadoki-values summary span{font-family:var(--mono);font-size:9px;color:#dfbb99}
-.dokkadoki-values summary::after{grid-column:2;grid-row:1;margin-left:auto;color:#dfbb99}
+.dokkadoki-values summary strong{font:inherit;font-weight:500}
+.dokkadoki-values summary::after{grid-column:3;grid-row:1;margin-left:0;color:#dfbb99}
 .dokkadoki-values p{margin:0;padding:0 0 17px 40px;color:#baaca2;font-size:12px;line-height:1.65}
 .personal-grid-two{grid-template-columns:1fr 1fr}
 .personal-grid-two .tile{min-height:264px}
