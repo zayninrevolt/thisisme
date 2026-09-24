@@ -43,6 +43,33 @@ export function calculateRecommendedCylinderLitres({ occupants, bedrooms }) {
   return Math.max(occupantRuleLitres, bedroomRuleLitres);
 }
 
+function finiteTemperature(value, label) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    throw new RangeError(`${label} must be a valid temperature.`);
+  }
+  return number;
+}
+
+export function calculateTheoreticalTapWaterLitres({
+  cylinderLitres,
+  coldFeedTemperature,
+  storageTemperature,
+  tapTemperature = 40,
+}) {
+  const litres = positiveNumber(cylinderLitres, 'Cylinder litres');
+  const cold = finiteTemperature(coldFeedTemperature, 'Cold feed temperature');
+  const storage = finiteTemperature(storageTemperature, 'Storage temperature');
+  const tap = finiteTemperature(tapTemperature, 'Tap temperature');
+  if (tap <= cold) {
+    throw new RangeError('Tap temperature must be greater than cold feed temperature.');
+  }
+  if (storage <= tap) {
+    throw new RangeError('Storage temperature must be greater than tap temperature.');
+  }
+  return litres * (storage - cold) / (tap - cold);
+}
+
 export function calculateRechargeTimeHours({
   cylinderLitres,
   startTemperature,

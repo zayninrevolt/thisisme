@@ -1,5 +1,6 @@
 import {
   calculateRecommendedCylinderLitres,
+  calculateTheoreticalTapWaterLitres,
   calculateStoredEnergyKwh,
   calculateRechargeTimeHours,
   calculateRequiredKilowatts,
@@ -8,7 +9,7 @@ import {
 const $ = (id) => document.getElementById(id);
 const fields = [
   'occupants', 'bedrooms',
-  'cylinder-volume', 'start-temperature', 'target-temperature', 'heat-output', 'recharge-hours',
+  'cylinder-volume', 'cold-feed-temperature', 'start-temperature', 'target-temperature', 'heat-output', 'recharge-hours',
 ].map($);
 
 function numberValue(id) {
@@ -62,7 +63,13 @@ function update() {
       targetTemperature: numberValue('target-temperature'),
     };
     const sharedEnergy = calculateStoredEnergyKwh(shared);
+    const theoreticalTapWaterLitres = calculateTheoreticalTapWaterLitres({
+      cylinderLitres: shared.cylinderLitres,
+      coldFeedTemperature: numberValue('cold-feed-temperature'),
+      storageTemperature: shared.targetTemperature,
+    });
     $('shared-energy').textContent = `Heat required: ${formatNumber(sharedEnergy)} kWh`;
+    setResult('tap-water-result', `${formatNumber(theoreticalTapWaterLitres, 0)} L`);
 
     const rechargeHours = calculateRechargeTimeHours({ ...shared, heatOutputKw: numberValue('heat-output') });
     const requiredKilowatts = calculateRequiredKilowatts({ ...shared, rechargeHours: numberValue('recharge-hours') });

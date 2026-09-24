@@ -53,8 +53,9 @@ input:focus { border-color: var(--peach); box-shadow: 0 0 0 3px rgba(237,196,159
 
 .shared-panel { display: grid; grid-template-columns: minmax(180px, .75fr) minmax(0, 1.6fr); gap: 28px; align-items: end; margin: 22px 0; padding: clamp(23px, 3vw, 30px); }
 .shared-panel h2 { font-size: 25px; }
-.shared-fields { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.shared-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .shared-energy { grid-column: 1 / -1; margin: 0; color: #cad9bb; font: 12px 'DM Mono', monospace; }
+.shared-explainer { grid-column: 1 / -1; max-width: 660px; margin: -14px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
 
 .recharge-section { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
 .recharge-section label { margin-bottom: 22px; }
