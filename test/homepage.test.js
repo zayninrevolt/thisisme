@@ -6,12 +6,20 @@ const root = new URL('../', import.meta.url);
 const html = await readFile(new URL('index.html', root), 'utf8');
 const linkedin = 'https://uk.linkedin.com/in/richard-chamberlain-577043230';
 
-test('homepage is the approved professional card with the exact LinkedIn destination', () => {
+test('homepage is a professional card with reachable working tools, DokkaDoki and the exact LinkedIn destination', () => {
   assert.equal((html.match(/<main\b/g) || []).length, 1);
   assert.equal((html.match(/<h1\b/g) || []).length, 1);
   assert.match(html, /Gas building surveyor/);
   assert.match(html, /renewable technology\./);
   assert.ok(html.includes(`href="${linkedin}"`));
+  assert.match(html, /id="tools"/);
+  assert.match(html, /Heat loss survey/);
+  assert.match(html, /href="https:\/\/heatloss\.justzayn\.com\/"/);
+  assert.match(html, /Pipe sizing/);
+  assert.match(html, /Cylinder sizing/);
+  assert.match(html, /id="dokkadoki"/);
+  assert.match(html, /DokkaDoki is[\s\S]*more than/);
+  assert.match(html, /Manga to discover/);
   assert.match(html, /href="\/desktop\/"/);
   assert.match(html, /href="\/links\/"/);
   assert.doesNotMatch(html, /hello@example\.com|\u2014/);

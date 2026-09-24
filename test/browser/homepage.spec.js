@@ -97,3 +97,18 @@ test('homepage introduces Zayn and offers the exact professional LinkedIn contac
   await expect(page.locator('.contact-button')).toHaveAttribute('href', linkedin);
   await expect(page.getByRole('link', { name: 'Visit the original homepage' })).toHaveAttribute('href', '/desktop/');
 });
+
+test('homepage puts working tools and a fuller DokkaDoki story within easy reach', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Open working tools' }).click();
+  await expect(page).toHaveURL(/#tools$/);
+  await expect(page.locator('#tools')).toBeInViewport();
+  await expect(page.getByRole('link', { name: 'Open heat loss survey' })).toHaveAttribute('href', 'https://heatloss.justzayn.com/');
+  await expect(page.locator('.tool-card')).toHaveCount(3);
+  await expect(page.locator('.tool-card').filter({ hasText: 'Pipe sizing' })).toContainText('In development');
+  await page.getByRole('link', { name: 'DokkaDoki', exact: true }).click();
+  await expect(page).toHaveURL(/#dokkadoki$/);
+  await expect(page.locator('#dokkadoki-title')).toContainText(/DokkaDoki is\s*more than coffee\./);
+  await expect(page.locator('.dokkadoki-values details')).toHaveCount(3);
+  await expect(page.getByRole('link', { name: 'Visit DokkaDoki' })).toHaveAttribute('href', 'https://dokkadoki.co.uk/');
+});
