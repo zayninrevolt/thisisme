@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A simple hot-water cylinder sizing and recharge calculator.">
+  <title>Cylinder & recharge calculator | Zayn</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="https://justzayn.com/">ZAYN <span>/</span> WORKING TOOLS</a>
+    <p>CYLINDER SIZING · RECHARGE</p>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">DOMESTIC HOT WATER</p>
+      <h1 id="page-title">Cylinder &amp; recharge calculator.</h1>
+      <p class="lede">A straightforward starting point for working out cylinder storage, recharge time, and the heat output needed to hit a chosen recovery window.</p>
+    </section>
+
+    <section class="calculator-card sizing-card" aria-labelledby="sizing-title">
+      <div class="section-heading">
+        <p class="number">01</p>
+        <div>
+          <p class="eyebrow">START HERE</p>
+          <h2 id="sizing-title">Cylinder sizing</h2>
+        </div>
+      </div>
+      <div class="calculator-layout">
+        <div class="fields-grid">
+          <label>Hot-water demand at tap temperature (litres)
+            <input id="delivered-litres" type="number" min="1" step="1" value="150" inputmode="decimal">
+          </label>
+          <label>Cold feed temperature (°C)
+            <input id="sizing-cold-temperature" type="number" min="0" max="30" step="0.5" value="10" inputmode="decimal">
+          </label>
+          <label>Tap delivery temperature (°C)
+            <input id="delivery-temperature" type="number" min="1" max="70" step="0.5" value="40" inputmode="decimal">
+          </label>
+          <label>Cylinder storage temperature (°C)
+            <input id="sizing-storage-temperature" type="number" min="1" max="85" step="0.5" value="55" inputmode="decimal">
+          </label>
+        </div>
+        <output class="result-panel" id="sizing-output" aria-live="polite">
+          <span class="result-label">Suggested minimum storage</span>
+          <strong data-testid="cylinder-result">100 L</strong>
+          <span data-testid="cylinder-energy" class="result-detail">5.23 kWh stored from cold</span>
+        </output>
+      </div>
+      <p class="helper">This mixes stored cylinder water with cold feed to provide the chosen tap-temperature volume. It is a starting capacity only: allow for demand profile, usable cylinder volume and system design.</p>
+    </section>
+
+    <section class="shared-panel" aria-labelledby="shared-title">
+      <div>
+        <p class="eyebrow">SHARED HEATING FIGURES</p>
+        <h2 id="shared-title">Use the same cylinder in both recharge checks.</h2>
+      </div>
+      <div class="shared-fields">
+        <label>Cylinder volume (litres)
+          <input id="cylinder-volume" type="number" min="1" step="1" value="200" inputmode="decimal">
+        </label>
+        <label>Recharge start temperature (°C)
+          <input id="start-temperature" type="number" min="0" max="85" step="0.5" value="10" inputmode="decimal">
+        </label>
+        <label>Target cylinder temperature (°C)
+          <input id="target-temperature" type="number" min="1" max="90" step="0.5" value="55" inputmode="decimal">
+        </label>
+      </div>
+      <p id="shared-energy" class="shared-energy" aria-live="polite">Heat required: 10.47 kWh</p>
+    </section>
+
+    <section class="recharge-section" aria-label="Recharge calculations">
+      <article class="calculator-card">
+        <div class="section-heading">
+          <p class="number">02</p>
+          <div>
+            <p class="eyebrow">KNOWN HEAT OUTPUT</p>
+            <h2>Recharge time</h2>
+          </div>
+        </div>
+        <label>Heat output delivered to the cylinder (kW)
+          <input id="heat-output" type="number" min="0.1" step="0.1" value="3" inputmode="decimal">
+        </label>
+        <output class="result-panel compact" id="recharge-output" aria-live="polite">
+          <span class="result-label">Ideal recovery time</span>
+          <strong data-testid="recharge-result">3 hr 29 min</strong>
+          <span class="result-detail">Based on the shared cylinder values above</span>
+        </output>
+      </article>
+
+      <article class="calculator-card accent-card">
+        <div class="section-heading">
+          <p class="number">03</p>
+          <div>
+            <p class="eyebrow">KNOWN RECHARGE WINDOW</p>
+            <h2>Required heat output</h2>
+          </div>
+        </div>
+        <label>Target recharge time (hours)
+          <input id="recharge-hours" type="number" min="0.1" step="0.25" value="2.5" inputmode="decimal">
+        </label>
+        <output class="result-panel compact" id="output-output" aria-live="polite">
+          <span class="result-label">Heat output needed</span>
+          <strong data-testid="output-result">4.19 kW</strong>
+          <span class="result-detail">Delivered into the stored water</span>
+        </output>
+      </article>
+    </section>
+
+    <aside class="method-note" aria-labelledby="method-title">
+      <p class="eyebrow">WHAT THIS SHOWS</p>
+      <h2 id="method-title">A transparent first-pass calculation.</h2>
+      <p>All results use water’s specific heat capacity of 4.186 kJ/kg·K and treat 1 litre of water as approximately 1 kg. The recharge figures assume the stated heat output reaches the water, with no standing, distribution, coil-transfer, control or stratification losses.</p>
+    </aside>
+
+    <p id="calculator-error" class="error-message" role="alert" hidden></p>
+  </main>
+
+  <footer>Made as a practical working tool. Check final cylinder, coil and appliance selections against the actual design conditions.</footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

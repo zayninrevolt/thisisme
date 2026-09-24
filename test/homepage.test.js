@@ -6,7 +6,7 @@ const root = new URL('../', import.meta.url);
 const html = await readFile(new URL('index.html', root), 'utf8');
 const linkedin = 'https://uk.linkedin.com/in/richard-chamberlain-577043230';
 
-test('homepage is a professional card with reachable working tools, DokkaDoki and the exact LinkedIn destination', () => {
+test('homepage is a professional card with reachable working tools, DokkaDoki and the exact LinkedIn destination', async () => {
   assert.equal((html.match(/<main\b/g) || []).length, 1);
   assert.equal((html.match(/<h1\b/g) || []).length, 1);
   assert.match(html, /Gas building surveyor/);
@@ -17,6 +17,11 @@ test('homepage is a professional card with reachable working tools, DokkaDoki an
   assert.match(html, /href="https:\/\/heatloss\.justzayn\.com\/"/);
   assert.match(html, /Pipe sizing/);
   assert.match(html, /Cylinder sizing/);
+  assert.match(html, /href="\/cylinder\/"/);
+  await access(new URL('cylinder/index.html', root));
+  await access(new URL('cylinder/styles.css', root));
+  await access(new URL('cylinder/app.js', root));
+  await access(new URL('cylinder/src/calculations.js', root));
   assert.match(html, /id="dokkadoki"/);
   assert.match(html, /DokkaDoki is[\s\S]*more than/);
   assert.match(html, /Manga to discover/);

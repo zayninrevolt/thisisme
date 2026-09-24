@@ -104,6 +104,13 @@ test('homepage puts working tools and a fuller DokkaDoki story within easy reach
   await expect(page).toHaveURL(/#tools$/);
   await expect(page.locator('#tools')).toBeInViewport();
   await expect(page.getByRole('link', { name: 'Open heat loss survey' })).toHaveAttribute('href', 'https://heatloss.justzayn.com/');
+  await expect(page.getByRole('link', { name: 'Open cylinder calculator' })).toHaveAttribute('href', '/cylinder/');
+  await page.getByRole('link', { name: 'Open cylinder calculator' }).click();
+  await expect(page).toHaveURL(/\/cylinder\/$/);
+  await expect(page.getByRole('heading', { name: 'Cylinder sizing' })).toBeVisible();
+  await expect(page.getByTestId('recharge-result')).toHaveText('3 hr 29 min');
+  await page.goBack();
+  await expect(page).toHaveURL(/#tools$/);
   await expect(page.locator('.tool-card')).toHaveCount(3);
   await expect(page.locator('.tool-card').filter({ hasText: 'Pipe sizing' })).toContainText('In development');
   await page.getByRole('link', { name: 'DokkaDoki', exact: true }).click();
