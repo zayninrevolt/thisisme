@@ -117,7 +117,8 @@ test('homepage puts working tools and a fuller DokkaDoki story within easy reach
   await expect(page.getByTestId('recharge-result')).toHaveText('3 hr 29 min');
   await page.goBack();
   await expect(page).toHaveURL(/#tools$/);
-  await expect(page.locator('.tool-card')).toHaveCount(3);
+  await expect(page.locator('.tool-card')).toHaveCount(4);
+  await expect(page.getByRole('link', { name: 'Open QR generator' })).toHaveAttribute('href', '/qr-generator/');
   await expect(page.getByRole('link', { name: 'Open pipe calculator' })).toHaveAttribute('href', '/pipe/');
   await page.getByRole('link', { name: 'Open pipe calculator' }).click();
   await expect(page).toHaveURL(/\/pipe\/$/);

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Create a QR code locally in your browser and download it as a PNG.">
+  <meta name="color-scheme" content="dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'none'; frame-src 'none'">
+  <title>QR generator | Zayn</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/">ZAYN <span>/</span> WORKING TOOLS</a>
+    <p>LOCAL QR GENERATOR</p>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">PRIVATE BY DESIGN</p>
+      <h1 id="page-title">QR generator.</h1>
+      <p class="lede">Turn a link, message or other text into a downloadable QR code. Everything happens in this browser. Nothing is sent to a server or saved.</p>
+    </section>
+
+    <section class="generator" aria-label="QR code generator">
+      <form id="qr-form" novalidate>
+        <label for="qr-content">What should the QR code contain?</label>
+        <textarea id="qr-content" rows="7" maxlength="1800" spellcheck="false" placeholder="https://example.com" aria-describedby="content-hint"></textarea>
+        <p id="content-hint" class="hint">Links work best when they include <code>https://</code>. Plain text is fine too.</p>
+
+        <label for="error-correction">Error correction</label>
+        <select id="error-correction">
+          <option value="L">Low, smallest code</option>
+          <option value="M" selected>Medium, balanced</option>
+          <option value="Q">Quartile, more resilient</option>
+          <option value="H">High, most resilient</option>
+        </select>
+
+        <button class="generate" type="submit">Create QR code</button>
+        <p id="generator-error" class="error" role="alert" aria-live="assertive" hidden></p>
+      </form>
+
+      <section class="preview" aria-labelledby="preview-title">
+        <div class="preview-heading">
+          <p class="eyebrow">PREVIEW</p>
+          <h2 id="preview-title">Ready when you are.</h2>
+        </div>
+        <div class="qr-frame">
+          <canvas id="qr-canvas" width="512" height="512" aria-label="Generated QR code"></canvas>
+        </div>
+        <p id="preview-status" class="preview-status" role="status" aria-live="polite">Enter something above, then create your code.</p>
+        <button id="download-png" class="download" type="button" disabled>Download PNG</button>
+      </section>
+    </section>
+
+    <aside class="method-note" aria-labelledby="privacy-title">
+      <p class="eyebrow">KEEP IT SIMPLE</p>
+      <h2 id="privacy-title">Designed for a clean, scannable result.</h2>
+      <p>QR codes become denser as their content grows. Keep it short, use a high-contrast print, and test the exported code with a phone camera before sharing it widely.</p>
+    </aside>
+  </main>
+
+  <footer>Made as a browser-only utility. No account, no tracking, no uploads.</footer>
+  <script src="vendor/qrcode-generator.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
