@@ -18,6 +18,8 @@ for (const [width, height] of [[320,568],[390,844],[430,932],[768,1024],[844,390
     await expect(page.locator('.profession')).toHaveCSS('font-family', /Georgia/);
     await expect(page.locator('.contact-button')).toHaveCSS('background-color','rgb(200, 216, 169)');
     await expect(page.locator('.avatar')).toHaveCSS('border-radius','50%');
+    await expect(page.locator('.avatar')).toHaveAttribute('src', '/img/zayn-anime-profile.png');
+    await expect(page.locator('.brand-mark')).toHaveAttribute('src', '/img/z-mark.png');
     await expect(page.locator('.open-intro')).toHaveCSS('border-top-width','0px');
     await expect(page.locator('.site-header')).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

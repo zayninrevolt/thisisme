@@ -11,6 +11,12 @@ test('homepage is a professional card with reachable working tools, DokkaDoki an
   assert.equal((html.match(/<h1\b/g) || []).length, 1);
   assert.match(html, /Gas building surveyor/);
   assert.match(html, /renewable technology\./);
+  assert.match(html, /src="\/img\/zayn-anime-profile\.png"/);
+  assert.match(html, /src="\/img\/z-mark\.png"/);
+  assert.match(html, /rel="icon" href="\/img\/z-favicon\.png"/);
+  await access(new URL('img/zayn-anime-profile.png', root));
+  await access(new URL('img/z-mark.png', root));
+  await access(new URL('img/z-favicon.png', root));
   assert.ok(html.includes(`href="${linkedin}"`));
   assert.match(html, /id="tools"/);
   assert.match(html, /Heat loss survey/);
